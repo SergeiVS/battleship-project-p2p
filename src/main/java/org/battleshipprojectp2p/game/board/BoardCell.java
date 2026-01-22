@@ -2,27 +2,38 @@ package org.battleshipprojectp2p.game.board;
 
 import org.battleshipprojectp2p.common.CellValue;
 
-public class BoardCell implements  BoardCellInterface{
+public class BoardCell implements BoardCellInterface {
+    private final int index;
     private CellValue cellValue;
     private boolean isAttacked;
 
-    public BoardCell() {
+    public BoardCell(int index) {
+        this.index = index;
         this.cellValue = CellValue.E;
         this.isAttacked = false;
     }
 
-    @Override
-    public BoardCell getCell() {
-        return null;
+    public int getIndex() {
+        return index;
     }
 
     @Override
-    public BoardCell setNewCellValue(CellValue newCellValue) {
-        return null;
+    public void setCellValue(CellValue newCellValue) {
+        this.cellValue = newCellValue;
     }
 
     @Override
-    public BoardCell setIsAttacked(boolean isAttacked) {
-        return null;
+    public void setIsAttacked(boolean newIsAttacked) {
+        this.isAttacked = newIsAttacked;
+    }
+
+    @Override
+    public CellValue getCellValue() {
+        return this.cellValue;
+    }
+
+    @Override
+    public boolean isAttacked() {
+        return this.isAttacked;
     }
 }

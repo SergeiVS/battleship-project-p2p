@@ -3,20 +3,17 @@ package org.battleshipprojectp2p.game.gameDto;
 import org.battleshipprojectp2p.common.CellValue;
 
 public record Ship(
-        CellValue shipType,
-        int startRow,
-        int startCol,
-
-        /*
-          True if ship is placed horizontal
-          False if ship is in vertical position
-         */
-        boolean isHorizontal
+        int id,
+        CellValue type,
+        int[] position
 ) {
-    public Ship(CellValue shipType, int startRow, int startCol, boolean isHorizontal) {
-        this.shipType = shipType;
-        this.startRow = startRow;
-        this.startCol = startCol;
-        this.isHorizontal = isHorizontal;
+    public Ship(int id, CellValue type, int[] position) {
+        if(CellValue.E.equals(type) || CellValue.X.equals(type)){
+            throw new IllegalArgumentException("Invalid cell type. Ship could not be of Type empy or attacked");
+        }
+
+        this.id = id;
+        this.type = type;
+        this.position = position;
     }
 }

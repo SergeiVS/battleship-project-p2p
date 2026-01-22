@@ -1,16 +1,16 @@
 package org.battleshipprojectp2p.game.board;
-
 import org.battleshipprojectp2p.common.AttackStatus;
+import org.battleshipprojectp2p.game.Player;
+import org.battleshipprojectp2p.game.gameDto.AttackDto;
 import org.battleshipprojectp2p.game.gameDto.Ship;
 
 public interface BoardInterface {
+    BoardInterface placeSip(Ship ship);
 
-    AttackStatus attack(int row, int col);
-    Board getBoardArray();
-    Board placeShip(Ship ship);
+    BoardInterface removeShip(Ship ship);
 
-    Board removeShip(Ship ship);
+    BoardInterface fixBoard();
 
-    Board fixBoard(Board board);
-
+    AttackStatus attackEnemy(AttackDto attackDto);
+    BoardInterface attackSelf(int row, int column, AttackStatus  status);
 }
