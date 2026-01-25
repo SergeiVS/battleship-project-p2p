@@ -4,78 +4,52 @@ import org.battleshipprojectp2p.common.AttackStatus;
 import org.battleshipprojectp2p.game.board.Board;
 import org.battleshipprojectp2p.game.gameDto.*;
 
+import java.util.Random;
+
 public class Game implements GameInterface{
     private final Board boardLocal;
     private final Board boardRemote;
-
 
     public Game(Player playerLocal, Player playerRemote,  int rows, int columns) {
         this.boardLocal = new Board(rows, columns, playerLocal);
         this.boardRemote = new Board(rows, columns, playerRemote);
     }
 
-
-    /**
-     * @param setupDto
-     * @return
-     */
     @Override
-    public GameSetupResponse gameSetup(GameSetupDto setupDto) {
-        return null;
+    public void setShip(Ship ship, BoardDto boardDto) {
+      var player = boardDto.player();
+      if(player.isLocal()&& !boardLocal.isFixed()) boardLocal.placeShip(ship);
+    }
+    @Override
+    public void removeShip(Ship ship, BoardDto boardDto) {
+        var player = boardDto.player();
+        if(player.isLocal()&& !boardLocal.isFixed()) boardLocal.removeShip(ship);
     }
 
-    /**
-     * @param ship
-     */
-    @Override
-    public void setShip(Ship ship) {
-
-    }
-
-    /**
-     * @param ship
-     */
-    @Override
-    public void removeShip(Ship ship) {
-
-    }
-
-    /**
-     * @return
-     */
     @Override
     public boolean flipCoin() {
-        return false;
+        Random rand = new Random();
+        return rand.nextBoolean();
     }
 
-    /**
-     * @return
-     */
     @Override
     public BoardInitialStateDto startGame() {
-        return null;
+        if(boardLocal.isFixed()) {
+            return new BoardInitialStateDto(boardLocal);
+        }
+        throw new RuntimeException("Cannot start game, board is not fixed");
     }
 
-    /**
-     * @param attackDto
-     * @return
-     */
+
     @Override
-    public AttackStatus incomingAttack(AttackDto attackDto) {
-        return null;
+    public AttackResponseDto incomingAttack(AttackDto attackDto) {
+        return boardLocal.attackFromEnemy(attackDto);
     }
-
-    /**
-     * @param result
-     */
     @Override
-    public void fixAttackResult(AttackResultDto result) {
-
+    public void fixAttackResult(int row, int column, AttackResponseDto result) {
+    boardRemote.attackSelf(row, column, result);
     }
 
-    /**
-     * @return
-     */
     @Override
     public boolean isVictory() {
         return false;

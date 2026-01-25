@@ -12,7 +12,7 @@ public record BoardDto(
 ) {
     public BoardDto(Board board) {
         this(
-                new PlayerDto(board.getBoardOwner()),
+                board.getBoardOwner(),
                 board.getRowsCount(),
                 board.getColumnsCount(),
                 board.getBoard()

@@ -16,4 +16,8 @@ public enum CellValue {
         this.name = name;
         this.length = length;
     }
+
+    public int getLength() {
+        return length;
+    }
 }

@@ -2,6 +2,8 @@ package org.battleshipprojectp2p.game.board;
 
 import org.battleshipprojectp2p.common.CellValue;
 
+import java.util.function.IntPredicate;
+
 public class BoardCell implements BoardCellInterface {
     private final int index;
     private CellValue cellValue;
@@ -15,6 +17,10 @@ public class BoardCell implements BoardCellInterface {
 
     public int getIndex() {
         return index;
+    }
+
+    public void setAttacked() {
+        isAttacked = true;
     }
 
     @Override

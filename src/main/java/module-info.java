@@ -10,6 +10,7 @@ module org.battleshipprojectp2p {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires annotations;
 
     opens org.battleshipprojectp2p to javafx.fxml;
     exports org.battleshipprojectp2p;

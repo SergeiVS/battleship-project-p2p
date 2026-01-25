@@ -4,13 +4,11 @@ import org.battleshipprojectp2p.common.AttackStatus;
 import org.battleshipprojectp2p.game.gameDto.*;
 
 public interface GameInterface {
-
-    GameSetupResponse gameSetup(GameSetupDto setupDto);
-    void setShip(Ship ship);
-    void removeShip(Ship ship);
+    void setShip(Ship ship, BoardDto boardDto);
+    void removeShip(Ship ship, BoardDto boardDto);
     boolean flipCoin();
     BoardInitialStateDto startGame();
-    AttackStatus incomingAttack(AttackDto attackDto);
-    void fixAttackResult(AttackResultDto result);
+    AttackResponseDto incomingAttack(AttackDto attackDto);
+    void fixAttackResult(int row, int column, AttackResponseDto result);
     boolean isVictory();
 }
