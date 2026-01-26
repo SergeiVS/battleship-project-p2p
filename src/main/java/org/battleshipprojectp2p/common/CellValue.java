@@ -1,18 +1,20 @@
 package org.battleshipprojectp2p.common;
 
 public enum CellValue {
-    B("battleship", 4),
-    C("carrier", 5),
-    D("destroyer", 2),
-    E("empty", 1),
-    F("frigate", 3),
-    S("submarine", 1),
-    X("hit", 1);
+    B("battleship", 4, 1),
+    C("carrier", 5,1),
+    D("destroyer", 2,3),
+    E("empty", 1,0),
+    F("frigate", 3,2),
+    S("submarine", 1,4),
+    X("hit", 1,1);
 
     private String name;
     private int length;
 
-    CellValue(String name, int length) {
+    private int count;
+
+    CellValue(String name, int length, int count) {
         this.name = name;
         this.length = length;
     }

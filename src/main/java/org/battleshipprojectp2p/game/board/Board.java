@@ -63,6 +63,11 @@ public class Board implements BoardInterface {
     public boolean isFixed() {
         return isFixed;
     }
+
+    public List<Ship> getFleet() {
+        return fleet;
+    }
+
     @Override
     public void placeShip(Ship ship) {
         validateShipPosition(ship);
@@ -121,8 +126,10 @@ public class Board implements BoardInterface {
 
     @Override
     public void attackSelf(int row, int column, AttackResponseDto attackResponse) {
+
         var cellIndex = getCellIndex(row, column);
-        var cellValue = attackResponse.getCellValue();
+        var cellValue = attackResponse.getCellValue()
+                .orElseThrow(()-> new IllegalArgumentException("Invalid cell value, by AttackStatus.Sink cell value could not be empty"));
 
         validateIsLocal();
         validateIsAttacked(cellIndex);
@@ -133,15 +140,55 @@ public class Board implements BoardInterface {
         setCellValueAfterHit(attackResponse, cellIndex, cellValue);
     }
 
-    private void setCellValueAfterHit(AttackResponseDto attackResponse, int cellIndex, Optional<CellValue> cellValue) {
+    private void setCellValueAfterHit(AttackResponseDto attackResponse, int cellIndex, CellValue cellValue) {
+
+        IO.println(cellValue);
+        IO.println(cellValue.getLength());
         if(AttackStatus.HIT.equals(attackResponse.attackStatus())) {
             board[cellIndex].setCellValue(CellValue.X);
         }
+
         if(AttackStatus.SINK.equals(attackResponse.attackStatus())) {
-            if(cellValue.isEmpty()){
-                throw new IllegalArgumentException("Invalid cell value, by AttackStatus.Sink cell value could not be empty");
-            }
+            findSunkShip(cellIndex, cellValue);
             board[cellIndex].setCellValue(attackResponse.cellValue());
+        }
+    }
+
+    private void findSunkShip(int cellIndex,  CellValue cellValue) {
+
+        var shipLength = cellValue.getLength();
+        List<Integer> shipPosition = new ArrayList<>();
+        shipPosition.add(cellIndex);
+        var isVertical = true;
+
+        if (board[cellIndex + 1].getCellValue() == CellValue.X || board[cellIndex - 1].getCellValue() == CellValue.X) {
+            fillShipPosition(cellIndex, 1, shipPosition);
+            isVertical = false;
+        } else if (board[cellIndex + columnsCount].getCellValue() == CellValue.X || board[cellIndex - columnsCount].getCellValue() == CellValue.X) {
+            fillShipPosition(cellIndex, columnsCount, shipPosition);
+        }
+
+        assert(shipPosition.size() == shipLength);
+
+        shipPosition.forEach(position -> {board[position].setCellValue(cellValue);});
+
+        int[] positionArray = IntStream.range(0, shipPosition.size()).toArray();
+
+        var ship = new  Ship(cellIndex, cellValue, positionArray, isVertical);
+        fleet.add(ship);
+    }
+
+    private void fillShipPosition(int cellIndex, int shiftIndex, List<Integer> shipPosition) {
+        var index = cellIndex + shiftIndex;
+        while(board[index].getCellValue() == CellValue.X){
+            shipPosition.add(index);
+            index++;
+        }
+        index = cellIndex - shiftIndex;
+
+        while (board[index].getCellValue() == CellValue.X){
+            shipPosition.add(index);
+index++;
         }
     }
 

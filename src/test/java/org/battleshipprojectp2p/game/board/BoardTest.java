@@ -145,17 +145,19 @@ class BoardTest {
 
     @Test
     void attackSelf() {
-        board2.attackSelf(0,0, new AttackResponseDto(AttackStatus.MISS, null));
-        board2.attackSelf(0,1, new AttackResponseDto(AttackStatus.HIT, null));
-        board2.attackSelf(0,2, new AttackResponseDto(AttackStatus.SINK, ship1.type()));
+        board2.attackSelf(0,0, new AttackResponseDto(AttackStatus.MISS, CellValue.E));
+        board2.attackSelf(0,1, new AttackResponseDto(AttackStatus.HIT, CellValue.E));
 
         assertTrue(board2.getBoard()[0].isAttacked());
         assertTrue(board2.getBoard()[1].isAttacked());
-        assertTrue(board2.getBoard()[2].isAttacked());
 
         assertEquals(CellValue.E, board2.getBoard()[0].getCellValue());
         assertEquals(CellValue.X, board2.getBoard()[1].getCellValue());
-        assertEquals(ship1.type(), board2.getBoard()[2].getCellValue());
 
+        board2.attackSelf(0,2, new AttackResponseDto(AttackStatus.SINK, ship1.type()));
+        assertTrue(board2.getBoard()[2].isAttacked());
+
+        assertEquals(ship1.type(), board2.getBoard()[2].getCellValue());
+        assertEquals(1, board2.getFleet().size());
     }
 }
