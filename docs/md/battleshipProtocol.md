@@ -124,7 +124,7 @@ values Match the guest moves first, otherwise the host moves first.
 
 ### Cheat Prevention
 
-For integrity the board must be converted to a 1D projection String,
+For integrity the playerBoard must be converted to a 1D projection String,
 append the guessed value to the end of the String (separated by a
 semicolon), and hash it with SHA-256. This hash will be sent to the
 Opponent with the **Ready** message. At the end of the game, both
@@ -134,7 +134,7 @@ hash.
 
 #### Example
 
-**4x4 board with 2 ships:**\
+**4x4 playerBoard with 2 ships:**\
 E E E E\
 B B B B &#8594; EEEEBBBBSESE \
 S E S E\
@@ -253,7 +253,7 @@ the Player can still verify the game state.
 ```json
 {
   "won": "boolean",
-  "board": "string"
+  "playerBoard": "string"
 }
 ```
 

@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.battleshipprojectp2p.HelloController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.battleshipprojectp2p.BattleshipController">
+   <children>
+      <Button fx:id="hostStart" layoutX="216.0" layoutY="236.0" mnemonicParsing="false" onAction="#startHost" text="Host" textFill="#3879bf" />
+      <Button fx:id="guestStart" layoutX="473.0" layoutY="238.0" mnemonicParsing="false" onAction="#startGuest" text="Guest" textFill="#3879bf" />
+      <Label alignment="TOP_CENTER" layoutX="133.0" layoutY="71.0" text="Welcome to THE Battle" textAlignment="CENTER" textFill="#bf5f5f">
+         <font>
+            <Font name="Algerian" size="36.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
