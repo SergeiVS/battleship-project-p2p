@@ -8,6 +8,8 @@ public enum CellValue {
     D("destroyer", 2, 4),
     E("empty", 1, 0),
     F("frigate", 3, 3),
+    K("killed", 1, 0),
+    M("miss", 1, 0),
     S("submarine", 1, 1),
     X("hit", 1, 0);
 

@@ -1,0 +1,71 @@
+package org.battleshipprojectp2p.GUI.gameView;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import org.battleshipprojectp2p.GUI.boardModel.BoardModel;
+import org.battleshipprojectp2p.common.AttackSide;
+import org.battleshipprojectp2p.common.GameState;
+import org.battleshipprojectp2p.game.GameManager;
+import org.battleshipprojectp2p.game.gameDto.GameData;
+import org.battleshipprojectp2p.game.observer.GameObserver;
+
+public class GameViewController implements GameObserver<GameData> {
+    //
+    private GameManager game;
+
+    private int rows;
+    private int cols;
+
+    private BoardModel playerBoard;
+    private BoardModel opponentBoard;
+
+    private SetupMenu setupMenu;
+
+    private GameState gameState;
+    private AttackSide attackSide;
+
+    @FXML
+    private HBox gamePane;
+    @FXML
+    private VBox playerBox;
+    @FXML
+    private VBox opponentBox;
+    @FXML
+    private VBox setupBox;
+    @FXML
+    private Label playerName;
+    @FXML
+    private Label opponentName;
+
+    public GameViewController() {
+    }
+
+    public void initData(GameManager gameManager) {
+        setupMenu = new SetupMenu();
+        setupMenu.initialize();
+        IO.println(setupMenu.toString());
+        this.game = gameManager;
+        this.rows = game.getRows();
+        this.cols = game.getColumns();
+        this.playerBoard = new BoardModel(event -> {
+        }, game.getPlayerBoard());
+        this.opponentBoard = new BoardModel(event -> {
+        }, game.getOpponentBoard());
+        this.playerBox.getChildren().add(this.playerBoard);
+        this.opponentBox.getChildren().add(this.opponentBoard);
+        this.setupBox.getChildren().add(this.setupMenu);
+        this.game.registerObserver(this);
+    }
+
+    @Override
+    public void update(GameData data) {
+        this.playerBoard.refreshBoard(data.board());
+        this.opponentBoard.refreshBoard(data.opponentBoard());
+        this.gameState = data.state();
+        this.attackSide = data.attackSide();
+        this.playerName.setText(data.board().player().name());
+        this.opponentName.setText(data.opponentBoard().player().name());
+    }
+}

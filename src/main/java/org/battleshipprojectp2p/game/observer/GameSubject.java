@@ -6,15 +6,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class GameSubject implements Subject<GameData> {
-    private final Set<Observer<GameData>> observers = new HashSet<>();
+    private final Set<GameObserver<GameData>> observers = new HashSet<>();
 
     @Override
-    public void subscribe(Observer<GameData> observer) {
+    public void subscribe(GameObserver<GameData> observer) {
         observers.add(observer);
     }
 
     @Override
-    public void unsubscribe(Observer<GameData> observer) {
+    public void unsubscribe(GameObserver<GameData> observer) {
         observers.remove(observer);
     }
 

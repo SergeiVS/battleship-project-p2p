@@ -11,7 +11,23 @@ module org.battleshipprojectp2p {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires annotations;
+    requires java.desktop;
 
     opens org.battleshipprojectp2p to javafx.fxml;
     exports org.battleshipprojectp2p;
+    opens org.battleshipprojectp2p.GUI.gameSetupView to javafx.fxml;
+    exports org.battleshipprojectp2p.GUI.gameSetupView;
+    opens org.battleshipprojectp2p.GUI.startView to javafx.fxml;
+    exports org.battleshipprojectp2p.GUI.startView;
+    opens org.battleshipprojectp2p.GUI.gameView to javafx.fxml;
+    exports org.battleshipprojectp2p.GUI.gameView;
+    exports org.battleshipprojectp2p.game;
+    exports org.battleshipprojectp2p.game.gameDto;
+    exports org.battleshipprojectp2p.game.observer;
+    exports org.battleshipprojectp2p.game.board;
+    exports org.battleshipprojectp2p.game.ship;
+    exports org.battleshipprojectp2p.error;
+    exports org.battleshipprojectp2p.GUI.boardModel;
+    opens org.battleshipprojectp2p.GUI.boardModel to javafx.fxml;
+
 }

@@ -6,6 +6,7 @@ public record GameSetup(
         Player player,
         Player opponent,
         int rows,
-        int columns
+        int columns,
+        boolean isHost
 ) {
 }

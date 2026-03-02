@@ -15,6 +15,7 @@ import org.battleshipprojectp2p.game.gameDto.AttackDto;
 import org.battleshipprojectp2p.game.gameDto.AttackResponseDto;
 import org.battleshipprojectp2p.game.gameDto.GameData;
 import org.battleshipprojectp2p.game.gameDto.GameSetup;
+import org.battleshipprojectp2p.game.observer.GameObserver;
 import org.battleshipprojectp2p.game.observer.GameSubject;
 import org.battleshipprojectp2p.game.ship.Ship;
 
@@ -22,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameManager {
+    private final int rows;
+    private final int columns;
     private final PlayerBoard playerBoard;
     private final OpponentBoard opponentBoard;
     private final GameSubject subject = new GameSubject();
@@ -29,20 +32,19 @@ public class GameManager {
     private final CoinFlipManager coinFlipManager;
     private final AttackSideManager attackSideManager;
 
-    public GameManager(GameSetup setup, CoinFlipManager coinFlipManager) {
+    public GameManager(GameSetup setup) {
+        this.rows = setup.rows();
+        this.columns = setup.columns();
         List<BoardRule> rules = new ArrayList<>(List.of(new ShipAllowedPositionRule(), new ShipAmountRule()));
         this.playerBoard = new PlayerBoard(setup.rows(), setup.columns(), setup.player(), rules);
         this.opponentBoard = new OpponentBoard(setup.rows(), setup.columns(), setup.opponent(), rules);
-        this.coinFlipManager = coinFlipManager;
+        this.coinFlipManager = new CoinFlipManager(setup.isHost());
         this.stateManager = new StateManager();
         this.attackSideManager = new AttackSideManager();
-
-        notifyUpdate();
     }
 
     public void ready(boolean opponentFlip) {
         verifyGameState(GameState.SETUP);
-
 
         final boolean isFirst = coinFlipManager.isFirstMove(opponentFlip);
 
@@ -65,7 +67,6 @@ public class GameManager {
     public void addShip(Ship ship) throws BrokenRuleException {
         verifyGameState(GameState.SETUP);
         playerBoard.addShip(ship);
-
         notifyUpdate();
     }
 
@@ -79,7 +80,6 @@ public class GameManager {
         verifyGameState(GameState.PLAYING);
         verifyAttackSide(AttackSide.OPPONENT);
         final var response = playerBoard.markAttack(attackDto);
-
 
         attackSideManager.changeSide();
         verifyGame(playerBoard);
@@ -95,8 +95,8 @@ public class GameManager {
         opponentBoard.markAttack(attackDto.row(), attackDto.column(), attackResponse);
 
         verifyGame(opponentBoard);
-        notifyUpdate();
         attackSideManager.changeSide();
+        notifyUpdate();
     }
 
     public void verifyGame(Board board) {
@@ -115,6 +115,14 @@ public class GameManager {
         }
     }
 
+    public int getRows() {
+        return rows;
+    }
+
+    public int getColumns() {
+        return columns;
+    }
+
     public BoardData getPlayerBoard() {
         return new BoardData(playerBoard);
     }
@@ -131,8 +139,12 @@ public class GameManager {
         return attackSideManager.getCurrentSide();
     }
 
-    public void notifyUpdate() {
+    private void notifyUpdate() {
         subject.notify(new GameData(this));
+    }
+
+    public void registerObserver(GameObserver<GameData> gameObserver) {
+        subject.subscribe(gameObserver);
     }
 
 

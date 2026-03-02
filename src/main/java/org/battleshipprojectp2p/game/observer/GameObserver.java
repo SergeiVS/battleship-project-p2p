@@ -1,5 +1,5 @@
 package org.battleshipprojectp2p.game.observer;
 
-public interface Observer<T> {
+public interface GameObserver<T> {
     void update(T data);
 }

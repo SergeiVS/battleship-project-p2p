@@ -9,16 +9,29 @@ public record BoardData(
         Player player,
         int rowsCount,
         int columnsCount,
-        BoardCell[] board,
+        BoardCell[][] board,
         List<Ship> fleet
 ) {
     public BoardData(Board board) {
+        int rowsCount = board.getRowsCount();
+        int columnsCount = board.getColumnsCount();
+        BoardCell[] boardCells = board.getBoard();
+        BoardCell[][] board2D = new BoardCell[columnsCount][rowsCount];
+
+        for (int x = 0; x < columnsCount; x++) {
+            for (int y = 0; y < rowsCount; y++) {
+                board2D[x][y] = boardCells[y * columnsCount + x];
+            }
+        }
+
         this(
                 board.getOwner(),
-                board.getRowsCount(),
-                board.getColumnsCount(),
-                board.getBoard(),
+                rowsCount,
+                columnsCount,
+                board2D,
                 board.getFleet()
         );
     }
+
+
 }
