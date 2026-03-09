@@ -45,7 +45,6 @@ public class GameViewController implements GameObserver<GameData> {
     public void initData(GameManager gameManager) {
         setupMenu = new SetupMenu();
         setupMenu.initialize();
-        IO.println(setupMenu.toString());
         this.game = gameManager;
         this.rows = game.getRows();
         this.cols = game.getColumns();
@@ -57,6 +56,7 @@ public class GameViewController implements GameObserver<GameData> {
         this.opponentBox.getChildren().add(this.opponentBoard);
         this.setupBox.getChildren().add(this.setupMenu);
         this.game.registerObserver(this);
+        IO.println(setupBox.getChildren().toString());
     }
 
     @Override

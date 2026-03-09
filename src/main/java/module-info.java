@@ -15,8 +15,8 @@ module org.battleshipprojectp2p {
 
     opens org.battleshipprojectp2p to javafx.fxml;
     exports org.battleshipprojectp2p;
-    opens org.battleshipprojectp2p.GUI.gameSetupView to javafx.fxml;
-    exports org.battleshipprojectp2p.GUI.gameSetupView;
+    opens org.battleshipprojectp2p.GUI.gameConnectView to javafx.fxml;
+    exports org.battleshipprojectp2p.GUI.gameConnectView;
     opens org.battleshipprojectp2p.GUI.startView to javafx.fxml;
     exports org.battleshipprojectp2p.GUI.startView;
     opens org.battleshipprojectp2p.GUI.gameView to javafx.fxml;
@@ -29,5 +29,6 @@ module org.battleshipprojectp2p {
     exports org.battleshipprojectp2p.error;
     exports org.battleshipprojectp2p.GUI.boardModel;
     opens org.battleshipprojectp2p.GUI.boardModel to javafx.fxml;
+    exports org.battleshipprojectp2p.common;
 
 }

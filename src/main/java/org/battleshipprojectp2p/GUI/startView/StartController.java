@@ -19,11 +19,11 @@ public class StartController {
 
     @FXML
     public void startHost(ActionEvent actionEvent) throws IOException {
-        loadNewView("host-game-setup-view.fxml");
+        loadNewView("host-game-connect-view.fxml");
     }
 
     @FXML
     public void startGuest(ActionEvent actionEvent) {
-        loadNewView("guest-game-setup-view.fxml");
+        loadNewView("guest-game-connect-view.fxml");
     }
 }

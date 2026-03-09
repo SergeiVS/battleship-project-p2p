@@ -46,9 +46,9 @@ public class BoardModel extends Parent {
     }
 
     private void fillBoard(EventHandler<? super MouseEvent> eventHandler, BoardData data) {
-        for (int x = 0; x < colsCount; x++) {
+        for (int x = 0; x < rowsCount; x++) {
             HBox row = new HBox();
-            for (int y = 0; y < rowsCount; y++) {
+            for (int y = 0; y < colsCount; y++) {
                 Cell cell = new Cell(new Point(x, y));
                 cell.setOnMouseClicked(eventHandler);
                 setCellColor(data.board()[x][y].getCellValue(), cell);

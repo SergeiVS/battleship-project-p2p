@@ -16,11 +16,11 @@ public record BoardData(
         int rowsCount = board.getRowsCount();
         int columnsCount = board.getColumnsCount();
         BoardCell[] boardCells = board.getBoard();
-        BoardCell[][] board2D = new BoardCell[columnsCount][rowsCount];
+        BoardCell[][] board2D = new BoardCell[rowsCount][columnsCount];
 
-        for (int x = 0; x < columnsCount; x++) {
-            for (int y = 0; y < rowsCount; y++) {
-                board2D[x][y] = boardCells[y * columnsCount + x];
+        for (int x = 0; x < rowsCount; x++) {
+            for (int y = 0; y < columnsCount; y++) {
+                board2D[x][y] = boardCells[x * rowsCount + y];
             }
         }
 

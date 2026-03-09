@@ -12,7 +12,7 @@
 
 <AnchorPane fx:id="GameSetupView" prefHeight="267.0" prefWidth="368.0" xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.battleshipprojectp2p.GUI.gameSetupView.HostGameSetupController">
+            fx:controller="org.battleshipprojectp2p.GUI.gameConnectView.HostGameConnectController">
     <GridPane alignment="CENTER" cacheShape="false" centerShape="false" hgap="5.0" layoutX="69.0" layoutY="34.0"
               scaleShape="false" vgap="5.0" AnchorPane.leftAnchor="69.0">
         <columnConstraints>
@@ -27,7 +27,7 @@
         </rowConstraints>
         <Label prefHeight="17.0" prefWidth="86.0" text="Player Name"/>
         <TextField fx:id="nameField" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-                   minWidth="-Infinity" onKeyTyped="#onNameInsert" prefHeight="25.0" prefWidth="45.0"
+                   minWidth="-Infinity" onKeyTyped="#onNameInput" prefHeight="25.0" prefWidth="45.0"
                    GridPane.columnIndex="1"/>
         <Label alignment="CENTER" contentDisplay="CENTER" text="Rows Count" textAlignment="CENTER"
                GridPane.rowIndex="1">
@@ -37,10 +37,10 @@
         </Label>
         <Label alignment="CENTER" text="Columns count" GridPane.rowIndex="2"/>
         <TextField fx:id="rowsInput" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                   minWidth="-Infinity" onKeyTyped="#checkIsNumber" prefHeight="25.0" prefWidth="45.0"
+                   minWidth="-Infinity" onKeyTyped="#onNumberInput" prefHeight="25.0" prefWidth="45.0"
                    GridPane.columnIndex="1" GridPane.rowIndex="1"/>
         <TextField fx:id="colsInput" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                   minWidth="-Infinity" onKeyTyped="#checkIsNumber" prefHeight="25.0" prefWidth="45.0"
+                   minWidth="-Infinity" onKeyTyped="#onNumberInput" prefHeight="25.0" prefWidth="45.0"
                    GridPane.columnIndex="1" GridPane.rowIndex="2"/>
         <padding>
             <Insets bottom="20.0" left="5.0" right="20.0" top="5.0"/>
