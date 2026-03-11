@@ -5,6 +5,7 @@ import org.battleshipprojectp2p.error.BrokenRuleException;
 import org.battleshipprojectp2p.game.board.PlayerBoard;
 import org.battleshipprojectp2p.game.ship.Ship;
 import org.battleshipprojectp2p.game.player.Player;
+import org.battleshipprojectp2p.game.ship.ShipType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,8 +43,8 @@ class ShipAmountRuleTest {
         int[] pos1 = {2, 3, 4, 5, 6};
         int[] pos2 = {8, 18, 28, 38, 48};
 
-        Ship carrier1 = new Ship(CellValue.C, pos1, false, false);
-        Ship carrier2 = new Ship(CellValue.C, pos2, true, false);
+        Ship carrier1 = new Ship(ShipType.CARRIER, pos1, false, false);
+        Ship carrier2 = new Ship(ShipType.CARRIER, pos2, true, false);
 
         playerBoard.addShip(carrier1);
 

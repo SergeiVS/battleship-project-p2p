@@ -48,6 +48,8 @@ public class GameViewController implements GameObserver<GameData> {
         this.game = gameManager;
         this.rows = game.getRows();
         this.cols = game.getColumns();
+        this.playerName.setText(gameManager.getPlayerBoard().player().name());
+        this.opponentName.setText(gameManager.getOpponentBoard().player().name());
         this.playerBoard = new BoardModel(event -> {
         }, game.getPlayerBoard());
         this.opponentBoard = new BoardModel(event -> {
@@ -56,7 +58,6 @@ public class GameViewController implements GameObserver<GameData> {
         this.opponentBox.getChildren().add(this.opponentBoard);
         this.setupBox.getChildren().add(this.setupMenu);
         this.game.registerObserver(this);
-        IO.println(setupBox.getChildren().toString());
     }
 
     @Override

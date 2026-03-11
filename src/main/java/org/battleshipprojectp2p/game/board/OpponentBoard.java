@@ -9,9 +9,14 @@ import org.battleshipprojectp2p.game.board.boardRules.ShipAllowedPositionRule;
 import org.battleshipprojectp2p.game.gameDto.AttackResponseDto;
 import org.battleshipprojectp2p.game.player.Player;
 import org.battleshipprojectp2p.game.ship.Ship;
+import org.battleshipprojectp2p.game.ship.ShipType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static org.battleshipprojectp2p.game.ship.ShipType.getCellValueFromShipClass;
+import static org.battleshipprojectp2p.game.ship.ShipType.getShipByLength;
 
 public class OpponentBoard extends Board {
 
@@ -27,11 +32,8 @@ public class OpponentBoard extends Board {
     public void markAttack(int row, int column, AttackResponseDto attackResponse) throws BrokenRuleException {
         validateRow(row);
         validateColumn(column);
-
         var cellIndex = getCellIndexByCoordinates(row, column);
-
         validateIsAttacked(cellIndex);
-
         board[cellIndex].setAttacked();
 
         setCellValueAfterHit(attackResponse, cellIndex);
@@ -45,26 +47,27 @@ public class OpponentBoard extends Board {
         }
 
         if (AttackStatus.SINK.equals(attackResponse.attackStatus())) {
+
             board[cellIndex].setCellValue(attackResponse.cellValue());
-            findSunkShip(cellIndex, attackResponse.cellValue());
+            findSunkShip(cellIndex);
         }
     }
 
-    private void findSunkShip(int cellIndex, CellValue cellValue) throws BrokenRuleException {
+    private void findSunkShip(int cellIndex) throws BrokenRuleException {
 
-        final var shipLength = cellValue.getLength();
         final List<Integer> shipPosition = new ArrayList<>();
 
         shipPosition.add(cellIndex);
 
         var isVertical = isIsVertical(cellIndex, shipPosition);
-
-        assert (shipPosition.size() == shipLength);
-
-        shipPosition.forEach(position -> board[position].setCellValue(cellValue));
+        IO.println("Ship position" + shipPosition);
+        ShipType shipType = getShipByLength(shipPosition.size());
+        IO.println("Ship type" + shipType);
+        shipPosition.forEach(position -> board[position].setCellValue(getCellValueFromShipClass(shipType)));
 
         int[] positionArray = shipPosition.stream().mapToInt(Integer::intValue).toArray();
-        var ship = new Ship(cellValue, positionArray, isVertical, true);
+        IO.println("Ship position array" + Arrays.toString(positionArray));
+        var ship = new Ship(shipType, positionArray, isVertical, true);
 
         verifyRules(ship);
 

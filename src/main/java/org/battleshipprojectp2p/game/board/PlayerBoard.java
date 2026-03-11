@@ -12,6 +12,8 @@ import org.battleshipprojectp2p.game.player.Player;
 
 import java.util.*;
 
+import static org.battleshipprojectp2p.game.ship.ShipType.getCellValueFromShipClass;
+
 public class PlayerBoard extends Board {
 
 
@@ -24,10 +26,12 @@ public class PlayerBoard extends Board {
     public void addShip(Ship ship) throws BrokenRuleException {
 
         verifyRules(ship);
-
         final var shipPosition = ship.position();
 
-        Arrays.stream(shipPosition).forEach(position -> board[position].setCellValue(ship.type()));
+        Arrays.stream(shipPosition).forEach(
+                position -> board[position]
+                        .setCellValue(getCellValueFromShipClass(ship.type()))
+        );
         fleet.add(ship);
     }
 
@@ -35,7 +39,10 @@ public class PlayerBoard extends Board {
         var shipPosition = ship.position();
 
         Arrays.stream(shipPosition).forEach(position -> {
-            if (board[position].getCellValue().equals(ship.type())) {
+            if (
+                    board[position].getCellValue()
+                            .equals(getCellValueFromShipClass(ship.type()))
+            ) {
                 board[position].setCellValue(CellValue.E);
             } else {
                 throw new IllegalArgumentException("Invalid ship position");
@@ -67,7 +74,7 @@ public class PlayerBoard extends Board {
 
         if (notAttacked.length == 0) {
             setShipSunk(ship);
-            return new AttackResponseDto(AttackStatus.SINK, ship.type());
+            return new AttackResponseDto(AttackStatus.SINK, getCellValueFromShipClass(ship.type()));
         }
 
         return new AttackResponseDto(AttackStatus.HIT, CellValue.X);

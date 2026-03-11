@@ -25,6 +25,8 @@ module org.battleshipprojectp2p {
     exports org.battleshipprojectp2p.game.gameDto;
     exports org.battleshipprojectp2p.game.observer;
     exports org.battleshipprojectp2p.game.board;
+    exports org.battleshipprojectp2p.game.board.boardRules;
+    exports org.battleshipprojectp2p.game.player;
     exports org.battleshipprojectp2p.game.ship;
     exports org.battleshipprojectp2p.error;
     exports org.battleshipprojectp2p.GUI.boardModel;

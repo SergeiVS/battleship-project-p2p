@@ -2,15 +2,14 @@ package org.battleshipprojectp2p.GUI.boardModel;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import org.battleshipprojectp2p.game.board.BoardCell;
 
 
-public class Cell extends Rectangle {
+public class BoardCell extends Rectangle {
     private final Point position;
     private boolean isTouched;
 
 
-    public Cell(Point position) {
+    public BoardCell(Point position) {
         super(20, 20);
         this.position = position;
         isTouched = false;

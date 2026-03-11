@@ -1,7 +1,6 @@
 package org.battleshipprojectp2p.game;
 
 import org.battleshipprojectp2p.common.AttackSide;
-import org.battleshipprojectp2p.common.CellValue;
 import org.battleshipprojectp2p.common.GameState;
 import org.battleshipprojectp2p.error.BrokenRuleException;
 import org.battleshipprojectp2p.game.board.Board;
@@ -21,6 +20,8 @@ import org.battleshipprojectp2p.game.ship.Ship;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.battleshipprojectp2p.game.ship.ShipType.getTotalShipsAmount;
 
 public class GameManager {
     private final int rows;
@@ -108,7 +109,7 @@ public class GameManager {
                 notifyUpdate();
             }
         } else {
-            if (opponentBoard.getFleet().size() == CellValue.E.getAllShipsCount()) {
+            if (opponentBoard.getFleet().size() == getTotalShipsAmount()) {
                 stateManager.setState(GameState.GAME_OVER);
                 notifyUpdate();
             }

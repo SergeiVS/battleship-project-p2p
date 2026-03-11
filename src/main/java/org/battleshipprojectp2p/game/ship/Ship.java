@@ -1,23 +1,21 @@
 package org.battleshipprojectp2p.game.ship;
 
-import org.battleshipprojectp2p.common.CellValue;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
 import java.util.Objects;
 
 public record Ship(
-        CellValue type,
+        ShipType type,
         int[] position,
         boolean isVertical,
         boolean isSunk
 
 ) {
     public Ship {
-        if (CellValue.E.equals(type) || CellValue.X.equals(type)) {
-            throw new IllegalArgumentException("Invalid cell type. Ship could not be of Type empy or attacked");
+        if (ShipType.UNDEFINED == type) {
+            throw new IllegalArgumentException("Invalid cell type. Ship could not be of Type undefined");
         }
         if (position.length != type.getLength()) {
+            IO.println(position.length + " " + type.getLength());
             throw new IllegalArgumentException("Invalid ship position length. Ship could not be of Type empy or attacked");
         }
     }

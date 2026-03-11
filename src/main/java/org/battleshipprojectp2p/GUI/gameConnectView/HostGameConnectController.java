@@ -12,7 +12,7 @@ import org.battleshipprojectp2p.game.gameDto.GameSetup;
 import org.battleshipprojectp2p.game.player.Player;
 
 import static java.lang.Integer.parseInt;
-import static org.battleshipprojectp2p.GUI.AlertService.showAlert;
+import static org.battleshipprojectp2p.GUI.utils.AlertService.showAlert;
 import static org.battleshipprojectp2p.GUI.ViewLoader.loadGameView;
 
 public class HostGameConnectController {

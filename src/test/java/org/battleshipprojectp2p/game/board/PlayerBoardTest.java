@@ -10,6 +10,7 @@ import org.battleshipprojectp2p.game.gameDto.AttackDto;
 import org.battleshipprojectp2p.game.gameDto.AttackResponseDto;
 import org.battleshipprojectp2p.game.ship.Ship;
 import org.battleshipprojectp2p.game.player.Player;
+import org.battleshipprojectp2p.game.ship.ShipType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static org.battleshipprojectp2p.game.ship.ShipType.getCellValueFromShipClass;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -33,8 +35,8 @@ class PlayerBoardTest {
 
     int[] position1 = {1, 2};
     int[] position2 = {10, 14, 18};
-    Ship ship1 = new Ship(CellValue.D, position1, false, false);
-    Ship ship2 = new Ship(CellValue.F, position2, true, false);
+    Ship ship1 = new Ship(ShipType.DESTROYER, position1, false, false);
+    Ship ship2 = new Ship(ShipType.FRIGATE, position2, true, false);
 
     List<BoardRule> rules = new ArrayList<>(List.of(new ShipAmountRule(), new ShipAllowedPositionRule()));
 
@@ -85,8 +87,8 @@ class PlayerBoardTest {
     @Test
     void shouldAddShipSuccess() throws BrokenRuleException {
 
-        Ship ship3 = new Ship(CellValue.D, new int[]{3, 4}, false, false);
-        Ship ship4 = new Ship(CellValue.D, new int[]{13, 17}, true, false);
+        CellValue cellValue1 = getCellValueFromShipClass(ship1.type());
+        CellValue cellValue2 = getCellValueFromShipClass(ship2.type());
 
         playerBoard1.addShip(ship1);
         playerBoard1.addShip(ship2);
@@ -94,7 +96,7 @@ class PlayerBoardTest {
         int[] expectedPositions = IntStream.concat(Arrays.stream(position1), Arrays.stream(position2)).toArray();
 
         int[] resultPositions = Arrays.stream(playerBoard1.getBoard())
-                .filter(cell -> cell.getCellValue().equals(ship1.type()) || cell.getCellValue().equals(ship2.type()))
+                .filter(cell -> cell.getCellValue().equals(cellValue1) || cell.getCellValue().equals(cellValue2))
                 .mapToInt(BoardCell::getIndex).toArray();
 
         assertArrayEquals(expectedPositions, resultPositions);
@@ -103,8 +105,8 @@ class PlayerBoardTest {
     @Test
     void shouldThrowBrokenRuleException() throws BrokenRuleException {
 
-        Ship ship3 = new Ship(CellValue.D, new int[]{3, 4}, false, false);
-        Ship ship4 = new Ship(CellValue.D, new int[]{13, 17}, true, false);
+        Ship ship3 = new Ship(ShipType.DESTROYER, new int[]{3, 4}, false, false);
+        Ship ship4 = new Ship(ShipType.DESTROYER, new int[]{13, 17}, true, false);
 
         playerBoard1.addShip(ship1);
         playerBoard1.addShip(ship2);
@@ -118,9 +120,11 @@ class PlayerBoardTest {
         playerBoard1.addShip(ship1);
         playerBoard1.addShip(ship2);
 
+        CellValue cellValue1 = getCellValueFromShipClass(ship1.type());
+
         playerBoard1.removeShip(ship2);
         int[] resultPositions = Arrays.stream(playerBoard1.getBoard())
-                .filter(cell -> cell.getCellValue().equals(ship1.type()))
+                .filter(cell -> cell.getCellValue().equals(cellValue1))
                 .mapToInt(BoardCell::getIndex).toArray();
 
 
@@ -144,7 +148,7 @@ class PlayerBoardTest {
 
         assertEquals(new AttackResponseDto(AttackStatus.HIT, CellValue.X), result1);
         assertEquals(new AttackResponseDto(AttackStatus.MISS, CellValue.E), result2);
-        assertEquals(new AttackResponseDto(AttackStatus.SINK, ship1.type()), result3);
+        assertEquals(new AttackResponseDto(AttackStatus.SINK, getCellValueFromShipClass(ship1.type())), result3);
         assertThrows(IllegalArgumentException.class, () -> playerBoard1.markAttack(attack4), "Player is not equal to this player");
         assertThrows(IllegalArgumentException.class, () -> playerBoard1.markAttack(attack5), "Invalid row");
         assertThrows(IllegalArgumentException.class, () -> playerBoard1.markAttack(attack6), "Invalid column");

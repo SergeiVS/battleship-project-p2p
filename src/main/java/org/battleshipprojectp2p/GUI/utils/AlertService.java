@@ -1,4 +1,4 @@
-package org.battleshipprojectp2p.GUI;
+package org.battleshipprojectp2p.GUI.utils;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
