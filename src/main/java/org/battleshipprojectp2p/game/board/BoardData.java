@@ -8,21 +8,15 @@ import java.util.List;
 public record BoardData(
         Player player,
         int rowsCount,
-        int columnsCount,
+        int colsCount,
         BoardCell[][] board,
         List<Ship> fleet
 ) {
     public BoardData(Board board) {
         int rowsCount = board.getRowsCount();
         int columnsCount = board.getColumnsCount();
-        BoardCell[] boardCells = board.getBoard();
-        BoardCell[][] board2D = new BoardCell[rowsCount][columnsCount];
+        BoardCell[][] board2D = board.getBoard2D();
 
-        for (int x = 0; x < rowsCount; x++) {
-            for (int y = 0; y < columnsCount; y++) {
-                board2D[x][y] = boardCells[x * rowsCount + y];
-            }
-        }
 
         this(
                 board.getOwner(),

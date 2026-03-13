@@ -45,6 +45,7 @@ public class ShipClassInitContainer extends HBox {
         amountField.setStyle("-fx-alignment: right-center;");
         this.setSpacing(10);
         this.setStyle("-fx-alignment: center-right;");
+        this.getChildren().addAll(shipNameField, ships, amountField);
     }
 
     private StackPane initSips() {
@@ -60,11 +61,22 @@ public class ShipClassInitContainer extends HBox {
             }
             stack.getChildren().add(hBox);
         }
+        stack.setOnMouseClicked(mouseClicked());
         return stack;
     }
 
     private void changeAmount() {
         this.restShipsAmount = ships.getChildren().size();
         amountField.setText(restShipsAmount + "/" + totalAmount);
+    }
+
+    private EventHandler<MouseEvent> mouseClicked() {
+        return event -> {
+            if (!this.ships.getChildren().isEmpty()) {
+                int lastIndex = this.ships.getChildren().size() - 1;
+                this.ships.getChildren().remove(lastIndex);
+                changeAmount();
+            }
+        };
     }
 }

@@ -51,8 +51,6 @@ public class SetupMenu extends VBox {
                 var shipClassContainer = new ShipClassInitContainer(shipType);
                 shipClassContainer.initialize();
                 shipsInitContainers.add(shipClassContainer);
-                this.shipsInitContainer.alignmentProperty();
-                this.shipsInitContainer.setPadding(shipClassContainer.getPadding());
             }
         }
         return shipsInitContainers;

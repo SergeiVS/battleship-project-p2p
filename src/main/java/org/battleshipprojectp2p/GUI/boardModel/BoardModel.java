@@ -22,7 +22,7 @@ public class BoardModel extends Parent {
     private final int rowsCount;
 
     public BoardModel(EventHandler<? super MouseEvent> eventHandler, BoardData data) {
-        this.colsCount = data.columnsCount();
+        this.colsCount = data.colsCount();
         this.rowsCount = data.rowsCount();
         fillBoard(eventHandler, data);
     }

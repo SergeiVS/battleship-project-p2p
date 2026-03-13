@@ -1,9 +1,14 @@
 package org.battleshipprojectp2p.GUI.gameView;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import org.battleshipprojectp2p.GUI.boardModel.BoardModel;
 import org.battleshipprojectp2p.common.AttackSide;
 import org.battleshipprojectp2p.common.GameState;
@@ -45,20 +50,52 @@ public class GameViewController implements GameObserver<GameData> {
     public void initData(GameManager gameManager) {
         setupMenu = new SetupMenu();
         setupMenu.initialize();
+
         this.game = gameManager;
         this.rows = game.getRows();
         this.cols = game.getColumns();
+
         this.playerName.setText(gameManager.getPlayerBoard().player().name());
         this.opponentName.setText(gameManager.getOpponentBoard().player().name());
+
         this.playerBoard = new BoardModel(event -> {
         }, game.getPlayerBoard());
+        playerBoard.setOnMouseEntered(mouseEntered(playerBoard));
+        playerBoard.setOnMouseExited(mouseExited(playerBoard));
+
         this.opponentBoard = new BoardModel(event -> {
         }, game.getOpponentBoard());
+        opponentBoard.setOnMouseEntered(mouseEntered(opponentBoard));
+        opponentBoard.setOnMouseExited(mouseExited(opponentBoard));
+
         this.playerBox.getChildren().add(this.playerBoard);
         this.opponentBox.getChildren().add(this.opponentBoard);
+
         this.setupBox.getChildren().add(this.setupMenu);
+
         this.game.registerObserver(this);
     }
+
+    private EventHandler<MouseEvent> mouseEntered(Node board) {
+        DropShadow shadow = new DropShadow();
+        shadow.setRadius(5.0);
+        shadow.setOffsetX(3.0);
+        shadow.setOffsetY(3.0);
+        shadow.setColor(Color.SIENNA);
+
+        return event -> {
+            board.setEffect(shadow);
+        };
+    }
+
+    private EventHandler<MouseEvent> mouseExited(Node board) {
+
+        return event -> {
+            board.setEffect(null);
+        };
+    }
+
+    ;
 
     @Override
     public void update(GameData data) {

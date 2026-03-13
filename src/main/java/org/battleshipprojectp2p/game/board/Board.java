@@ -56,8 +56,17 @@ public class Board {
         }
     }
 
-    public int getCellIndexByCoordinates(int row, int column) {
+    public BoardCell[][] getBoard2D() {
+        BoardCell[][] board2D = new BoardCell[rowsCount][columnsCount];
+        for (int x = 0; x < rowsCount; x++) {
+            System.arraycopy(this.board, x * this.rowsCount, board2D[x], 0, this.columnsCount);
+        }
+        return board2D;
+    }
+
+    protected int getCellIndexByCoordinates(int row, int column) {
         return (row * columnsCount) + column;
     }
+
 
 }
