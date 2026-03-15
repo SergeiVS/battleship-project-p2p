@@ -1,4 +1,4 @@
-package org.battleshipprojectp2p.GUI.boardModel;
+package org.battleshipprojectp2p.GUI.models.boardModel;
 
 import javafx.scene.paint.Color;
 

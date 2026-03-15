@@ -9,7 +9,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import org.battleshipprojectp2p.GUI.boardModel.BoardModel;
+import org.battleshipprojectp2p.GUI.models.SetupMenu;
+import org.battleshipprojectp2p.GUI.models.boardModel.BoardModel;
 import org.battleshipprojectp2p.common.AttackSide;
 import org.battleshipprojectp2p.common.GameState;
 import org.battleshipprojectp2p.game.GameManager;
@@ -70,6 +71,7 @@ public class GameViewController implements GameObserver<GameData> {
 
         this.playerBox.getChildren().add(this.playerBoard);
         this.opponentBox.getChildren().add(this.opponentBoard);
+        this.opponentBox.setVisible(false);
 
         this.setupBox.getChildren().add(this.setupMenu);
 

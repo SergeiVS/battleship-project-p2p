@@ -1,4 +1,4 @@
-package org.battleshipprojectp2p.GUI.boardModel;
+package org.battleshipprojectp2p.GUI.models.boardModel;
 
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -43,8 +43,8 @@ public class BoardModel extends Parent {
             }
 
             for (int x = 0; x < colsCount; x++) {
-                BoardCell boardCell = (BoardCell) row.getChildren().get(x);
-                setCellColor(data.board()[x][y].getCellValue(), boardCell);
+                PaintableBoardCell ptblBoardCell = (PaintableBoardCell) row.getChildren().get(x);
+                setCellColor(data.board()[x][y].getCellValue(), ptblBoardCell);
             }
         }
     }
@@ -59,10 +59,10 @@ public class BoardModel extends Parent {
             row.getChildren().add(lineNumber);
 
             for (int y = 0; y < colsCount; y++) {
-                BoardCell boardCell = new BoardCell(new Point(x, y));
-                boardCell.setOnMouseClicked(eventHandler);
-                setCellColor(data.board()[x][y].getCellValue(), boardCell);
-                row.getChildren().add(boardCell);
+                PaintableBoardCell ptblBoardCell = new PaintableBoardCell(new Point(x, y));
+                ptblBoardCell.setOnMouseClicked(eventHandler);
+                setCellColor(data.board()[x][y].getCellValue(), ptblBoardCell);
+                row.getChildren().add(ptblBoardCell);
             }
             rows.getChildren().add(row);
         }
@@ -80,41 +80,41 @@ public class BoardModel extends Parent {
     @NotNull
     private HBox fillColsNumbers() {
         HBox colsNumbers = new HBox();
-        Rectangle emptyCell = new Rectangle(20, 0);
+        Rectangle emptyCell = new Rectangle(25, 25);
         emptyCell.setFill(Color.TRANSPARENT);
         colsNumbers.getChildren().add(emptyCell);
         colsNumbers.setSpacing(2);
 
         for (int i = 0; i < colsCount; i++) {
             Text lineNumber = new Text(String.valueOf(i));
-            lineNumber.setWrappingWidth(19);
+            lineNumber.setWrappingWidth(24);
             lineNumber.setStyle("-fx-font-weight: bold; -fx-alignment: BOTTOM-CENTER");
             colsNumbers.getChildren().add(lineNumber);
         }
         return colsNumbers;
     }
 
-    private void setCellColor(CellValue value, BoardCell boardCell) {
+    private void setCellColor(CellValue value, PaintableBoardCell ptblBoardCell) {
 
         switch (value) {
             case CellValue.E: {
-                boardCell.setFill(CellColors.EMPTY.getColor());
+                ptblBoardCell.setFill(CellColors.EMPTY.getColor());
                 break;
             }
             case CellValue.X: {
-                boardCell.setFill(CellColors.HIT.getColor());
+                ptblBoardCell.setFill(CellColors.HIT.getColor());
                 break;
             }
             case CellValue.K: {
-                boardCell.setFill(CellColors.KILLED.getColor());
+                ptblBoardCell.setFill(CellColors.KILLED.getColor());
                 break;
             }
             case CellValue.M: {
-                boardCell.setFill(CellColors.MISSED.getColor());
+                ptblBoardCell.setFill(CellColors.MISSED.getColor());
                 break;
             }
             default:
-                boardCell.setFill(CellColors.SHIP.getColor());
+                ptblBoardCell.setFill(CellColors.SHIP.getColor());
 
         }
     }
