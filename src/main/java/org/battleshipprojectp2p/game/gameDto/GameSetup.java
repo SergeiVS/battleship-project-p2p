@@ -2,8 +2,11 @@ package org.battleshipprojectp2p.game.gameDto;
 
 import org.battleshipprojectp2p.game.player.Player;
 
-public record AttackDto(
+public record GameSetup(
         Player player,
-        int row,
-        int column) {
+        Player opponent,
+        int rows,
+        int columns,
+        boolean isHost
+) {
 }

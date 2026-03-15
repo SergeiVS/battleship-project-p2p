@@ -1,25 +1,38 @@
 package org.battleshipprojectp2p.common;
 
+import org.battleshipprojectp2p.game.ship.ShipType;
+
 public enum CellValue {
-    B("battleship", 4, 1),
-    C("carrier", 5,1),
-    D("destroyer", 2,3),
-    E("empty", 1,0),
-    F("frigate", 3,2),
-    S("submarine", 1,4),
-    X("hit", 1,1);
+    B("battleship"),
+    C("carrier"),
+    D("destroyer"),
+    E("empty"),
+    F("frigate"),
+    K("killed"),
+    M("miss"),
+    S("submarine"),
+    X("hit");
 
-    private String name;
-    private int length;
+    private final String name;
 
-    private int count;
-
-    CellValue(String name, int length, int count) {
+    CellValue(String name) {
         this.name = name;
-        this.length = length;
     }
 
-    public int getLength() {
-        return length;
+
+    public String getName() {
+        return this.name;
+    }
+
+    public static ShipType getShipTypeFromCellValue(CellValue cellValue) {
+
+        return switch (cellValue) {
+            case B -> ShipType.BATTLESHIP;
+            case C -> ShipType.CARRIER;
+            case D -> ShipType.DESTROYER;
+            case F -> ShipType.FRIGATE;
+            case S -> ShipType.SUBMARINE;
+            default -> ShipType.UNDEFINED;
+        };
     }
 }
