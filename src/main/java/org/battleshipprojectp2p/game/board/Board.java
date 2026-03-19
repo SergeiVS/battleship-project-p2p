@@ -59,7 +59,9 @@ public class Board {
     public BoardCell[][] getBoard2D() {
         BoardCell[][] board2D = new BoardCell[rowsCount][columnsCount];
         for (int x = 0; x < rowsCount; x++) {
-            System.arraycopy(this.board, x * this.rowsCount, board2D[x], 0, this.columnsCount);
+            for (int y = 0; y < columnsCount; y++) {
+                board2D[x][y] = board[getCellIndexByCoordinates(x, y)];
+            }
         }
         return board2D;
     }

@@ -16,15 +16,11 @@ import static org.battleshipprojectp2p.game.ship.ShipType.getAllShipClasses;
 
 public class SetupMenu extends VBox {
 
-    @FXML
     private Label label;
+    private Button readyButton;
+    private Button startButton;
     @FXML
     private ButtonBar setupButtonBar;
-    @FXML
-    private Button readyButton;
-    @FXML
-    private Button startButton;
-
     @FXML
     private ShipChooserPane shipChoosers;
 
@@ -32,12 +28,11 @@ public class SetupMenu extends VBox {
         this.label = new Label();
         this.label.setText("Game Setup Menu");
         this.setupButtonBar = new ButtonBar();
-        this.setupButtonBar.setStyle("-fx-alignment: center;");
         this.readyButton = new Button("Ready");
         this.startButton = new Button("Start");
         this.setupButtonBar.getButtons().addAll(readyButton, startButton);
-        this.shipChoosers = new ShipChooserPane();
-        this.setStyle("-fx-alignment: center-right;");
+        this.shipChoosers = new ShipChooserPane(e -> {
+        });
         this.getChildren().addAll(setupButtonBar, shipChoosers);
         this.setSpacing(10);
     }

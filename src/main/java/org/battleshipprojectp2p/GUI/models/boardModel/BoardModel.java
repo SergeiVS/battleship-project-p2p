@@ -43,8 +43,8 @@ public class BoardModel extends Parent {
             }
 
             for (int x = 0; x < colsCount; x++) {
-                PaintableBoardCell ptblBoardCell = (PaintableBoardCell) row.getChildren().get(x);
-                setCellColor(data.board()[x][y].getCellValue(), ptblBoardCell);
+                PaintableBoardCell pBoardCell = (PaintableBoardCell) row.getChildren().get(x);
+                setCellColor(data.board()[x][y].getCellValue(), pBoardCell);
             }
         }
     }

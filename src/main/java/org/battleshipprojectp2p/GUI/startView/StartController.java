@@ -3,6 +3,7 @@ package org.battleshipprojectp2p.GUI.startView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 
 import java.io.IOException;
@@ -25,5 +26,11 @@ public class StartController {
     @FXML
     public void startGuest(ActionEvent actionEvent) {
         loadNewView("guest-game-connect-view.fxml");
+    }
+
+
+    @FXML
+    public void initialize() {
+        startLayout.setBackground(Background.EMPTY);
     }
 }

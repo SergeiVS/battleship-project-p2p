@@ -9,8 +9,8 @@ public enum ShipType {
 
     CARRIER(5, 1),
     BATTLESHIP(4, 2),
-    DESTROYER(2, 4),
     FRIGATE(3, 3),
+    DESTROYER(2, 4),
     SUBMARINE(1, 1),
     UNDEFINED(0, 0);
 
@@ -42,8 +42,8 @@ public enum ShipType {
         return switch (type) {
             case CARRIER -> CellValue.C;
             case BATTLESHIP -> CellValue.B;
-            case DESTROYER -> CellValue.D;
             case FRIGATE -> CellValue.F;
+            case DESTROYER -> CellValue.D;
             case SUBMARINE -> CellValue.S;
             case UNDEFINED -> CellValue.E;
         };

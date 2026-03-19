@@ -27,8 +27,6 @@ public class GameViewController implements GameObserver<GameData> {
     private BoardModel playerBoard;
     private BoardModel opponentBoard;
 
-    private SetupMenu setupMenu;
-
     private GameState gameState;
     private AttackSide attackSide;
 
@@ -49,12 +47,13 @@ public class GameViewController implements GameObserver<GameData> {
     }
 
     public void initData(GameManager gameManager) {
-        setupMenu = new SetupMenu();
+        SetupMenu setupMenu = new SetupMenu();
         setupMenu.initialize();
-
+        IO.println(setupMenu.getChildren());
         this.game = gameManager;
         this.rows = game.getRows();
         this.cols = game.getColumns();
+
 
         this.playerName.setText(gameManager.getPlayerBoard().player().name());
         this.opponentName.setText(gameManager.getOpponentBoard().player().name());
@@ -69,13 +68,15 @@ public class GameViewController implements GameObserver<GameData> {
         opponentBoard.setOnMouseEntered(mouseEntered(opponentBoard));
         opponentBoard.setOnMouseExited(mouseExited(opponentBoard));
 
+//        this.setupBox = new VBox();
+        this.setupBox.getChildren().add(setupMenu);
         this.playerBox.getChildren().add(this.playerBoard);
         this.opponentBox.getChildren().add(this.opponentBoard);
         this.opponentBox.setVisible(false);
 
-        this.setupBox.getChildren().add(this.setupMenu);
-
+        IO.println(setupBox.getChildren());
         this.game.registerObserver(this);
+        IO.println("Setup menu view order" + setupMenu.getAccessibleRole());
     }
 
     private EventHandler<MouseEvent> mouseEntered(Node board) {

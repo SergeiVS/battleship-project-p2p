@@ -7,8 +7,8 @@
 
 <BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="500.0" prefWidth="700.0"
-            style="-fx-background-image: url(assets/BB61_USS_Iowa_BB61_broadside_USN.png)"
-            stylesheets="@../../stylesheets/main-styles.css" xmlns="http://javafx.com/javafx/25"
+            style="-fx-background-image: url('assets/BB61_USS_Iowa_BB61_broadside_USN.png'); -fx-background-repeat: stretch; "
+            xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.battleshipprojectp2p.BattleshipController">
     <top>
         <Label fx:id="MottoLabel" alignment="TOP_CENTER" minHeight="-Infinity" text="Welcome to THE Battle"
