@@ -1,34 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 
-<HBox fx:id="gamePane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-      minWidth="-Infinity" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+<?import javafx.scene.layout.VBox?>
+<HBox fx:id="gamePane"
+      alignment="CENTER"
+      prefHeight="371.0"
+      prefWidth="511.0"
+      style="-fx-border-color: blue"
+      xmlns="http://javafx.com/javafx/25"
+      xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.battleshipprojectp2p.GUI.gameView.GameViewController">
-    <VBox fx:id="setupBox" alignment="TOP_CENTER" layoutX="477.0" layoutY="51.0">
-        <Label alignment="TOP_CENTER" contentDisplay="CENTER" lineSpacing="10.0" text="Game SetUp"/>
-        <HBox.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-        </HBox.margin>
+    <VBox fx:id="showBox">
     </VBox>
-    <VBox fx:id="playerBox" alignment="TOP_CENTER" layoutX="28.0" layoutY="51.0">
-        <Label text="YOU"/>
-        <Label fx:id="playerName" text="Label"/>
-        <HBox.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-        </HBox.margin>
-    </VBox>
-    <VBox fx:id="opponentBox" alignment="TOP_CENTER" layoutX="261.0" layoutY="51.0">
-        <Label text="YOUR OPPONENT"/>
-        <Label fx:id="opponentName" text="Label"/>
-        <HBox.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-        </HBox.margin>
-    </VBox>
-    <padding>
-        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-    </padding>
 </HBox>

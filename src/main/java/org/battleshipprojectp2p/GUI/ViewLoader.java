@@ -3,6 +3,7 @@ package org.battleshipprojectp2p.GUI;
 import com.almasb.fxgl.app.GameController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.battleshipprojectp2p.BattleshipApplication;
@@ -50,6 +51,7 @@ public class ViewLoader {
                 ((BorderPane) root).setCenter(parent);
             }
             stage.show();
+            IO.println(stage.getScene().getRoot().toString());
         } catch (Exception e) {
             e.printStackTrace();
         }

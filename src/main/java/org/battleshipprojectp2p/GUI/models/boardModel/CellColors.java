@@ -9,7 +9,7 @@ public enum CellColors {
     SHIP(Color.GRAY),
     HIT(Color.RED),
     KILLED(Color.BLACK),
-    ;
+    MOUSE_ENTERED(Color.LIGHTBLUE);
 
     final Color color;
 

@@ -71,7 +71,7 @@ public class GameManager {
         notifyUpdate();
     }
 
-    public void removeShip(Ship ship) throws BrokenRuleException {
+    public void removeShip(Ship ship) {
         verifyGameState(GameState.SETUP);
         playerBoard.removeShip(ship);
         notifyUpdate();
@@ -140,9 +140,14 @@ public class GameManager {
         return attackSideManager.getCurrentSide();
     }
 
-    private void notifyUpdate() {
-        subject.notify(new GameData(this));
+    public GameData getGameData() {
+        return new GameData(this);
     }
+
+    private void notifyUpdate() {
+        subject.notify(getGameData());
+    }
+
 
     public void registerObserver(GameObserver<GameData> gameObserver) {
         subject.subscribe(gameObserver);

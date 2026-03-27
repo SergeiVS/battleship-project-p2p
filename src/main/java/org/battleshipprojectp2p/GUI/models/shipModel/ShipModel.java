@@ -20,23 +20,23 @@ public class ShipModel extends Pane {
         this.getChildren().add(setHorizontal());
     }
 
-//    public void rotate() {
-//        if (!this.getChildren().isEmpty()) {
-//            if (this.getChildren().getFirst() instanceof HBox) {
-//                this.getChildren().removeFirst();
-//                this.getChildren().add(setVertical());
-//            }
-//            if (this.getChildren().getFirst() instanceof VBox) {
-//                this.getChildren().removeFirst();
-//                this.getChildren().add(setHorizontal());
-//            }
-//        }
-//    }
+    public void rotate() {
+        if (!this.getChildren().isEmpty()) {
+            if (this.getChildren().getFirst() instanceof HBox) {
+                this.getChildren().removeFirst();
+                this.getChildren().add(setVertical());
+            }
+            if (this.getChildren().getFirst() instanceof VBox) {
+                this.getChildren().removeFirst();
+                this.getChildren().add(setHorizontal());
+            }
+        }
+    }
 
     private void fillShip() {
         for (int i = 0; i < this.shipType.getLength(); i++) {
-            PaintableBoardCell ptblBoardCell = new PaintableBoardCell(CellColors.SHIP);
-            this.ship[i] = ptblBoardCell;
+            PaintableBoardCell pBoardCell = new PaintableBoardCell(CellColors.SHIP);
+            this.ship[i] = pBoardCell;
         }
     }
 

@@ -69,6 +69,4 @@ public class Board {
     protected int getCellIndexByCoordinates(int row, int column) {
         return (row * columnsCount) + column;
     }
-
-
 }

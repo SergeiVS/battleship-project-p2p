@@ -22,8 +22,10 @@ public class ShipChooserPane extends VBox {
             this.getChildren().add(chooser);
         }
         this.setSpacing(10);
-        this.setAlignment(Pos.TOP_RIGHT);
-        IO.println(this.toString());
-        IO.println(this.getChildren().toString());
+        this.setAlignment(Pos.TOP_CENTER);
+    }
+
+    public ShipChooser getShipChooser(ShipType ship) {
+        return shipsChoosers.get(ship);
     }
 }

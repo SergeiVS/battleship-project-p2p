@@ -7,11 +7,11 @@ import javafx.scene.shape.Rectangle;
 public class PaintableBoardCell extends Rectangle {
 
     private static final int SIZE = 25;
-    private final Point position;
+    private final CellPoint position;
     private boolean isTouched;
 
 
-    public PaintableBoardCell(Point position) {
+    public PaintableBoardCell(CellPoint position) {
         super(SIZE, SIZE);
         this.position = position;
         isTouched = false;
@@ -30,7 +30,7 @@ public class PaintableBoardCell extends Rectangle {
         this.setStroke(Color.BLACK);
     }
 
-    public Point getPosition() {
+    public CellPoint getPosition() {
         return position;
     }
 

@@ -10,14 +10,18 @@ public record Ship(
         boolean isSunk
 
 ) {
-    public Ship {
-        if (ShipType.UNDEFINED == type) {
-            throw new IllegalArgumentException("Invalid cell type. Ship could not be of Type undefined");
-        }
-        if (position.length != type.getLength()) {
-            IO.println(position.length + " " + type.getLength());
-            throw new IllegalArgumentException("Invalid ship position length. Ship could not be of Type empy or attacked");
-        }
+    public Ship(ShipType type) {
+
+        this(type, null, false, false);
+        validateShipType();
+    }
+
+    public Ship(ShipType type, int[] position, boolean isVertical, boolean isSunk) {
+        this.type = type;
+        this.position = position;
+        this.isVertical = isVertical;
+        this.isSunk = isSunk;
+        validateShipType();
     }
 
     public Ship rotate(boolean isVert, int cols) {
@@ -37,6 +41,27 @@ public record Ship(
 
     public Ship sunk() {
         return new Ship(this.type, this.position, this.isVertical, true);
+    }
+
+    public Ship setVertical(boolean isVertical) {
+        return new Ship(this.type, this.position, isVertical, this.isSunk);
+
+    }
+
+    private void validateShipType() {
+
+        if (ShipType.UNDEFINED == type) {
+            throw new IllegalArgumentException("Invalid cell type. Ship could not be of Type undefined");
+        }
+    }
+
+    private void validateShipLength() {
+
+        if (position.length != type.getLength()) {
+            IO.println(position.length + " " + type.getLength());
+            throw new IllegalArgumentException("Invalid ship position length. Ship could not be of Type empy or attacked");
+        }
+
     }
 
     @Override
