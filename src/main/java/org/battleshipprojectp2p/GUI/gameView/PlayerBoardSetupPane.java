@@ -1,5 +1,6 @@
 package org.battleshipprojectp2p.GUI.gameView;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -22,20 +23,21 @@ import static org.battleshipprojectp2p.GUI.utils.AlertService.showAlert;
 public class PlayerBoardSetupPane extends HBox implements GameObserver<GameData> {
 
     private final GameManager gameManager;
-
     private final PlayerBoardBuilderPane playersBoard;
-
     private final ShipChooserPane chooserPane;
 
     public PlayerBoardSetupPane(GameManager gameManager) {
         this.gameManager = gameManager;
         this.playersBoard = new PlayerBoardBuilderPane(gameManager.getPlayerBoard(), this::onHandleClick);
         this.chooserPane = new ShipChooserPane(playersBoard::setChosenShip);
+
+        gameManager.registerObserver(this);
     }
 
     public void initialize() {
         this.getChildren().addAll(chooserPane, playersBoard);
-        this.setSpacing(10);
+        this.setSpacing(20);
+        this.setPadding(new Insets(40));
     }
 
     public void onHandleClick(PaintableBoardCell cell, MouseEvent event) {
@@ -57,9 +59,7 @@ public class PlayerBoardSetupPane extends HBox implements GameObserver<GameData>
         }
 
         if (event.getEventType() == MouseEvent.MOUSE_CLICKED && event.getButton() == MouseButton.SECONDARY) {
-            IO.println("Clicked on " + cell.getPosition() + ", Remove Ship");
             removeShip(cell);
-            update(gameManager.getGameData());
         }
     }
 
@@ -100,8 +100,6 @@ public class PlayerBoardSetupPane extends HBox implements GameObserver<GameData>
 
     private void removeShip(PaintableBoardCell cell) {
 
-        IO.println("Fleet: " + gameManager.getPlayerBoard().fleet());
-
         if (this.playersBoard.getChosenShip().isPresent()) {
             return;
         }
@@ -118,7 +116,7 @@ public class PlayerBoardSetupPane extends HBox implements GameObserver<GameData>
         final var ship = optShip.get();
 
         this.gameManager.removeShip(ship);
-        IO.println("Removed Ship:" + gameManager.getPlayerBoard().fleet());
+
         final var chooser = this.chooserPane.getShipChooser(ship.type());
 
         if (chooser != null) {
@@ -127,6 +125,7 @@ public class PlayerBoardSetupPane extends HBox implements GameObserver<GameData>
     }
 
     private int[] getShipPosition(PaintableBoardCell cell, Ship ship) {
+
         var firstPoint = cell.getPosition();
         var shipLength = ship.type().getLength();
         var columns = gameManager.getColumns();
@@ -134,14 +133,17 @@ public class PlayerBoardSetupPane extends HBox implements GameObserver<GameData>
         var position = new int[shipLength];
 
         if (!isVertical) {
+
             for (int i = 0; i < shipLength; i++) {
                 position[i] = firstPoint.x() * columns + firstPoint.y() + i;
             }
         } else {
+
             for (int i = 0; i < shipLength; i++) {
                 position[i] = (firstPoint.x() + i) * columns + firstPoint.y();
             }
         }
+
         return position;
     }
 

@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.battleshipprojectp2p.GUI.gameConnectView.GuestGameConnectController">
-
-    <Button fx:id="submitGuest" layoutX="281.0" layoutY="227.0" mnemonicParsing="false" onKeyTyped="#onSubmit"
-            text="Enter game"/>
-    <TextField fx:id="nameField" layoutX="287.0" layoutY="145.0"/>
+    <Button fx:id="submitGuest" layoutX="281.0" layoutY="227.0" mnemonicParsing="false"
+            onAction="#connectGame" text="Enter game"/>
+    <Button fx:id="leavePageButton" layoutX="281.0" layoutY="267.0" mnemonicParsing="false"
+            onAction="#backToPrevPage" text="Back to Start"/>
+    <TextField fx:id="ipField" layoutX="287.0" layoutY="145.0"/>
     <Label layoutX="183.0" layoutY="149.0" text="Host IP"/>
     <Label layoutX="168.0" layoutY="97.0" text="Player name"/>
-    <TextField fx:id="ipField" layoutX="287.0" layoutY="102.0"/>
-
+    <TextField fx:id="nameField" layoutX="287.0" layoutY="102.0" onKeyTyped="#onNameInput"/>
 </AnchorPane>

@@ -12,11 +12,12 @@ import org.battleshipprojectp2p.game.gameDto.GameSetup;
 import org.battleshipprojectp2p.game.player.Player;
 
 import static java.lang.Integer.parseInt;
-import static org.battleshipprojectp2p.GUI.utils.AlertService.showAlert;
 import static org.battleshipprojectp2p.GUI.ViewLoader.loadGameView;
+import static org.battleshipprojectp2p.GUI.ViewLoader.loadNewView;
+import static org.battleshipprojectp2p.GUI.utils.AlertService.showAlert;
+import static org.battleshipprojectp2p.GUI.utils.InputsCheckUtil.*;
 
 public class HostGameConnectController {
-
 
     @FXML
     private AnchorPane GameSetupView;
@@ -28,10 +29,19 @@ public class HostGameConnectController {
     private TextField nameField;
     @FXML
     private Button setupSubmitButton;
+    @FXML
+    public Button backButton;
+
 
     @FXML
-    private void onNameInput(KeyEvent actionEvent) {
-        var source = actionEvent.getSource();
+    public void initialize() {
+        setupSubmitButton.setMinWidth(200);
+        backButton.setMinWidth(200);
+    }
+
+    @FXML
+    private void onNameInput(KeyEvent event) {
+        var source = event.getSource();
         assert (source instanceof TextField);
         var field = (TextField) source;
         var text = field.getText();
@@ -47,8 +57,8 @@ public class HostGameConnectController {
 
 
     @FXML
-    private void onNumberInput(KeyEvent actionEvent) {
-        var source = actionEvent.getSource();
+    private void onNumberInput(KeyEvent event) {
+        var source = event.getSource();
         assert (source instanceof TextField);
         TextField field = (TextField) source;
         var text = field.getText();
@@ -64,7 +74,8 @@ public class HostGameConnectController {
         }
     }
 
-    public void submitGameSetup(ActionEvent actionEvent) {
+    @FXML
+    public void submitGameSetup(ActionEvent event) {
         var name = nameField.getText();
         var isNameValid = checkName(name);
         outlineWrongInput(isNameValid, nameField);
@@ -76,7 +87,7 @@ public class HostGameConnectController {
         outlineWrongInput(isColsValid, colsInput);
 
         if (!isNameValid || !isRowsValid || !isColsValid) {
-            showAlert(Alert.AlertType.WARNING, "Wrong input", "Please enter valid values");
+            showAlert(Alert.AlertType.ERROR, "Wrong input", "Please enter valid values");
         } else {
             GameSetup setup = new GameSetup(
                     new Player(name),
@@ -90,19 +101,8 @@ public class HostGameConnectController {
         }
     }
 
-    private static boolean checkIsNumber(String text) {
-        return text.matches("^\\d+$");
-    }
-
-    private static boolean checkName(String text) {
-        return text.matches("^[a-zA-Z\\d@!&]+$");
-    }
-
-    private static void outlineWrongInput(boolean isOk, TextField field) {
-        if (!isOk) {
-            field.setStyle("-fx-border-color: red;");
-        } else {
-            field.setStyle("-fx-border-color: black;");
-        }
+    @FXML
+    public void toPreviousPage(ActionEvent actionEvent) {
+        loadNewView("start-view.fxml");
     }
 }

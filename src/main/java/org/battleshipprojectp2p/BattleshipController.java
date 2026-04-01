@@ -3,13 +3,9 @@ package org.battleshipprojectp2p;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 
-import java.io.IOException;
 import java.util.Objects;
 
 public class BattleshipController {
@@ -17,15 +13,12 @@ public class BattleshipController {
     @FXML
     private BorderPane root;
     @FXML
-    private Label MottoLabel;
-    @FXML
-    private HBox StartLayout;
-    @FXML
-    private AnchorPane GameSetupView;
+    private Label mottoLabel;
 
 
     @FXML
     void initialize() {
+        mottoLabel.setText("Welcome to The Battle");
         loadView("start-view.fxml");
     }
 

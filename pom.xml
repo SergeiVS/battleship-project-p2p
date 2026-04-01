@@ -147,6 +147,11 @@
                             <noManPages>true</noManPages>
                             <stripDebug>true</stripDebug>
                             <noHeaderFiles>true</noHeaderFiles>
+                            <resources>
+                                <directory>src/main/resources</directory>
+                                <includes>**/*.fxml</includes>
+                                <includes>**/*.css</includes>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>
