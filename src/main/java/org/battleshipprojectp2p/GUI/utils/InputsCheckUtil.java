@@ -11,6 +11,10 @@ public class InputsCheckUtil {
         return text.matches("^[a-zA-Z\\d@!&]+$");
     }
 
+    public static boolean checkIP(String text) {
+        return text.matches("(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)");
+    }
+
 
     public static void outlineWrongInput(boolean isOk, TextField field) {
         if (!isOk) {
