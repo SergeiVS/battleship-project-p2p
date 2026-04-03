@@ -100,6 +100,10 @@ public class BoardPane extends Pane {
         }
     }
 
+    public PaintableBoardCell getCell(CellPoint point) {
+        return cells.get(point);
+    }
+
     void setCellColor(CellValue value, PaintableBoardCell pBoardCell) {
 
         switch (value) {

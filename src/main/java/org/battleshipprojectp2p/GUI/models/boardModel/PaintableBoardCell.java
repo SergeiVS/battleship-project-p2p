@@ -38,6 +38,10 @@ public class PaintableBoardCell extends Rectangle {
         return isTouched;
     }
 
+    public void setTouched() {
+        isTouched = true;
+    }
+
     public void setColor(CellColors color) {
         this.setFill(color.getColor());
         isTouched = true;

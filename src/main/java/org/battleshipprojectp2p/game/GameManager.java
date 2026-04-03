@@ -79,7 +79,7 @@ public class GameManager {
 
     public AttackResponseDto markOpponentAttack(AttackDto attackDto) throws BrokenRuleException {
         verifyGameState(GameState.PLAYING);
-        verifyAttackSide(AttackSide.OPPONENT);
+//        verifyAttackSide(AttackSide.OPPONENT);
         final var response = playerBoard.markAttack(attackDto);
 
         attackSideManager.changeSide();
@@ -91,7 +91,7 @@ public class GameManager {
 
     public void markPlayerAttack(AttackDto attackDto, AttackResponseDto attackResponse) throws BrokenRuleException {
         verifyGameState(GameState.PLAYING);
-        verifyAttackSide(AttackSide.PLAYER);
+//        verifyAttackSide(AttackSide.PLAYER);
 
         opponentBoard.markAttack(attackDto.row(), attackDto.column(), attackResponse);
 
@@ -160,7 +160,7 @@ public class GameManager {
         }
     }
 
-    private void verifyAttackSide(AttackSide side) throws BrokenRuleException {
+    private void verifyAttackSide(AttackSide side) {
         if (attackSideManager.getCurrentSide() != side) {
             throw new IllegalStateException("It`s not your turn to strike");
         }

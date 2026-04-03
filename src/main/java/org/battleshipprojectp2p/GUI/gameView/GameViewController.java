@@ -16,8 +16,8 @@ public class GameViewController {
     private GameManager game;
 
     private PlayerBoardSetupPane setupPane;
-    @FXML
-    private HBox gamePane;
+
+    private GamePane gamePane;
     @FXML
     private VBox showBox;
     @FXML
@@ -51,14 +51,24 @@ public class GameViewController {
     }
 
     public void onGameControlClick(ActionEvent event) {
-        IO.println(game.getState().toString());
         if (this.game.getState() == GameState.SETUP) {
             game.ready(true);
+            initGamePane();
+            showBox.getChildren().clear();
+            showBox.getChildren().add(gamePane);
             gameControlButton.setText("START");
         } else if (this.game.getState() == GameState.READY) {
             game.start();
             gameControlButton.setVisible(false);
             IO.println(game.getState().toString());
+        }
+    }
+
+    private void initGamePane() {
+        if (this.game.getState() == GameState.READY) {
+            if (this.gamePane == null) {
+                this.gamePane = new GamePane(this.game);
+            }
         }
     }
 }

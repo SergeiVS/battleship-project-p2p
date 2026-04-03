@@ -13,6 +13,7 @@ public class Board {
     protected final Player owner;
     protected final int rowsCount;
     protected final int columnsCount;
+
     protected final BoardCell[] board;
     protected final List<Ship> fleet;
     protected final List<BoardRule> rules;
@@ -66,7 +67,7 @@ public class Board {
         return board2D;
     }
 
-    protected int getCellIndexByCoordinates(int row, int column) {
+    public int getCellIndexByCoordinates(int row, int column) {
         return (row * columnsCount) + column;
     }
 }

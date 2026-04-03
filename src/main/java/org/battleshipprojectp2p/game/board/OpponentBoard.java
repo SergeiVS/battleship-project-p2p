@@ -41,12 +41,16 @@ public class OpponentBoard extends Board {
 
     private void setCellValueAfterHit(AttackResponseDto attackResponse, int cellIndex) throws BrokenRuleException {
 
-        if (AttackStatus.HIT.equals(attackResponse.attackStatus())) {
+        if (attackResponse.attackStatus().equals(AttackStatus.HIT)) {
             board[cellIndex].setCellValue(CellValue.X);
             verifyHitSurround(cellIndex);
         }
 
-        if (AttackStatus.SINK.equals(attackResponse.attackStatus())) {
+        if (attackResponse.attackStatus().equals(AttackStatus.MISS)) {
+            board[cellIndex].setCellValue(CellValue.M);
+        }
+
+        if (attackResponse.attackStatus().equals(AttackStatus.SINK)) {
 
             board[cellIndex].setCellValue(attackResponse.cellValue());
             findSunkShip(cellIndex);

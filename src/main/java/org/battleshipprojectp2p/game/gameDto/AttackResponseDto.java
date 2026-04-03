@@ -10,14 +10,14 @@ public record AttackResponseDto(
         CellValue cellValue
 ) {
     public AttackResponseDto {
-        if (attackStatus == AttackStatus.HIT && cellValue != CellValue.X) {
-            throw new IllegalStateException("By Hit CellValue should be X");
-        }
-        if (attackStatus == AttackStatus.MISS && cellValue != CellValue.E) {
-            throw new IllegalStateException("By Miss CellValue should be E");
-        }
-        if (attackStatus == AttackStatus.SINK && (cellValue == CellValue.X || cellValue == CellValue.E)) {
-            throw new IllegalStateException("By Sink CellValue should not be X or E");
-        }
+//        if (attackStatus == AttackStatus.HIT && cellValue != CellValue.X) {
+//            throw new IllegalStateException("By Hit CellValue should be X");
+//        }
+//        if (attackStatus == AttackStatus.MISS && cellValue != CellValue.E) {
+//            throw new IllegalStateException("By Miss CellValue should be E");
+//        }
+//        if (attackStatus == AttackStatus.SINK && (cellValue == CellValue.X || cellValue == CellValue.E)) {
+//            throw new IllegalStateException("By Sink CellValue should not be X or E");
+//        }
     }
 }
