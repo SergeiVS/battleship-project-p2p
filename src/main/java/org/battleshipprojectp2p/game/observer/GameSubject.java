@@ -10,6 +10,7 @@ public class GameSubject implements Subject<GameData> {
 
     @Override
     public void subscribe(GameObserver<GameData> observer) {
+        IO.println("Observer subscribed: " + observer.getClass());
         observers.add(observer);
     }
 
@@ -20,6 +21,11 @@ public class GameSubject implements Subject<GameData> {
 
     @Override
     public void notify(GameData data) {
-        observers.forEach(observer -> observer.update(data));
+        IO.println("Observer notified observers: " + observers.size());
+
+        observers.forEach(observer -> {
+            IO.println("Observer notified: " + observer.getClass());
+            observer.update(data);
+        });
     }
 }

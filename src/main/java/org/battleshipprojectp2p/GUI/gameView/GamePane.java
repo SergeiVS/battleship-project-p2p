@@ -10,12 +10,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import org.battleshipprojectp2p.GUI.models.boardModel.*;
 import org.battleshipprojectp2p.common.AttackStatus;
-import org.battleshipprojectp2p.error.BrokenRuleException;
-import org.battleshipprojectp2p.game.GameManager;
 import org.battleshipprojectp2p.game.gameDto.AttackDto;
 import org.battleshipprojectp2p.game.gameDto.AttackResponseDto;
 import org.battleshipprojectp2p.game.gameDto.GameData;
 import org.battleshipprojectp2p.game.observer.GameObserver;
+import org.battleshipprojectp2p.service.AbstractService;
 
 public class GamePane extends HBox implements GameObserver<GameData> {
 
@@ -23,18 +22,18 @@ public class GamePane extends HBox implements GameObserver<GameData> {
     private final Label playerName = new Label();
     private final VBox opponentBox = new VBox();
     private final Label opponentName = new Label();
-    private final GameManager game;
+    private final AbstractService service;
     private final BoardPane playersBoard;
-
     private final BoardPane opponentsBoard;
 
-    public GamePane(GameManager game) {
-        this.game = game;
-        this.playersBoard = new PlayerBoardPane(this.game.getPlayerBoard(), this::handlePlayersBoardClick);
-        this.opponentsBoard = new OpponentBoardPane(this.game.getOpponentBoard(), this::handleOpponentBoartClick);
 
-        playerName.setText(game.getPlayerBoard().player().name());
-        opponentName.setText(game.getOpponentBoard().player().name());
+    public GamePane(AbstractService service) {
+        this.service = service;
+        this.playersBoard = new PlayerBoardPane(this.service.getPlayerBoard(), this::handlePlayersBoardClick);
+        this.opponentsBoard = new OpponentBoardPane(this.service.getOpponentBoard(), this::handleOpponentBoartClick);
+
+        playerName.setText(this.service.getPlayerBoard().player().name());
+        opponentName.setText(this.service.getOpponentBoard().player().name());
 
         playerBox.getChildren().addAll(playerName, playersBoard);
         opponentBox.getChildren().addAll(opponentName, opponentsBoard);
@@ -44,8 +43,7 @@ public class GamePane extends HBox implements GameObserver<GameData> {
         this.getChildren().addAll(playerBox, opponentBox);
         this.setSpacing(40);
 
-        game.registerObserver(this);
-
+        service.registerObserver(this);
     }
 
 
@@ -53,9 +51,7 @@ public class GamePane extends HBox implements GameObserver<GameData> {
     }
 
     public void handleOpponentBoartClick(PaintableBoardCell cell, MouseEvent event) {
-        if (cell.isTouched()) {
-            IO.println("cell is touched");
-        }
+
         cell.setTouched();
         if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
             cell.setStroke(Color.LIGHTBLUE);
@@ -66,16 +62,16 @@ public class GamePane extends HBox implements GameObserver<GameData> {
         if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
             if (cell.getFill() == CellColors.EMPTY.getColor()) {
                 final var point = cell.getPosition();
-                final var player = game.getPlayerBoard().player();
+                final var player = service.getPlayerBoard().player();
                 final var attackDto = new AttackDto(player, point.x(), point.y());
                 final var status = playersBoard.getCell(point).getFill() == CellColors.EMPTY.getColor() ? AttackStatus.MISS : AttackStatus.HIT;
-                final var cellValue = game.getPlayerBoard().board()[point.x()][point.y()].getCellValue();
+                final var cellValue = service.getPlayerBoard().board()[point.x()][point.y()].getCellValue();
                 final var attackResponse = new AttackResponseDto(status, cellValue);
-                try {
-                    game.markPlayerAttack(attackDto, attackResponse);
-                } catch (BrokenRuleException e) {
-                    e.getRule();
-                }
+//                try {
+//                    game.markPlayerAttack(attackDto, attackResponse);
+//                } catch (BrokenRuleException e) {
+//                    e.getRule();
+//                }
 
             }
         }

@@ -4,9 +4,9 @@ import org.battleshipprojectp2p.common.AttackSide;
 import org.battleshipprojectp2p.common.GameState;
 import org.battleshipprojectp2p.error.BrokenRuleException;
 import org.battleshipprojectp2p.game.board.Board;
+import org.battleshipprojectp2p.game.board.BoardData;
 import org.battleshipprojectp2p.game.board.OpponentBoard;
 import org.battleshipprojectp2p.game.board.PlayerBoard;
-import org.battleshipprojectp2p.game.board.BoardData;
 import org.battleshipprojectp2p.game.board.boardRules.BoardRule;
 import org.battleshipprojectp2p.game.board.boardRules.ShipAllowedPositionRule;
 import org.battleshipprojectp2p.game.board.boardRules.ShipAmountRule;
@@ -28,20 +28,22 @@ public class GameManager {
     private final int columns;
     private final PlayerBoard playerBoard;
     private final OpponentBoard opponentBoard;
-    private final GameSubject subject = new GameSubject();
+    private final GameSubject subject;
     private final StateManager stateManager;
     private final CoinFlipManager coinFlipManager;
     private final AttackSideManager attackSideManager;
 
-    public GameManager(GameSetup setup) {
+    public GameManager(GameSetup setup, GameSubject subject) {
         this.rows = setup.rows();
         this.columns = setup.columns();
+        this.subject = subject;
         List<BoardRule> rules = new ArrayList<>(List.of(new ShipAllowedPositionRule(), new ShipAmountRule()));
-        this.playerBoard = new PlayerBoard(setup.rows(), setup.columns(), setup.player(), rules);
-        this.opponentBoard = new OpponentBoard(setup.rows(), setup.columns(), setup.opponent(), rules);
+        this.playerBoard = new PlayerBoard(this.rows, this.columns, setup.player(), rules);
+        this.opponentBoard = new OpponentBoard(this.rows, this.columns, setup.opponent(), rules);
         this.coinFlipManager = new CoinFlipManager(setup.isHost());
         this.stateManager = new StateManager();
         this.attackSideManager = new AttackSideManager();
+        IO.println("Game manager Started");
     }
 
     public void ready(boolean opponentFlip) {
@@ -144,13 +146,17 @@ public class GameManager {
         return new GameData(this);
     }
 
-    private void notifyUpdate() {
+    public void notifyUpdate() {
         subject.notify(getGameData());
     }
 
 
-    public void registerObserver(GameObserver<GameData> gameObserver) {
+    public void subscribeObserver(GameObserver<GameData> gameObserver) {
         subject.subscribe(gameObserver);
+    }
+
+    public void unsubscribeObserver(GameObserver<GameData> gameObserver) {
+        subject.unsubscribe(gameObserver);
     }
 
 

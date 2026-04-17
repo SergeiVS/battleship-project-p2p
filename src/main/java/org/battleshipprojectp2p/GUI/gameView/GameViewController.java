@@ -1,5 +1,6 @@
 package org.battleshipprojectp2p.GUI.gameView;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -7,19 +8,25 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.battleshipprojectp2p.common.GameState;
-import org.battleshipprojectp2p.game.GameManager;
+import org.battleshipprojectp2p.game.gameDto.GameData;
+import org.battleshipprojectp2p.game.observer.GameObserver;
+import org.battleshipprojectp2p.service.AbstractService;
+import org.battleshipprojectp2p.service.HostService;
 
 import static org.battleshipprojectp2p.GUI.ViewLoader.loadNewView;
 
-public class GameViewController {
-    //
-    private GameManager game;
+public class GameViewController implements GameObserver<GameData> {
 
-    private PlayerBoardSetupPane setupPane;
+    private final AbstractService service;
+
+    private PlayerBoardSetupPane boardSetupPane;
 
     private GamePane gamePane;
     @FXML
     private VBox showBox;
+
+    private HostConnectionWaitingMask hostWaitingMask;
+    private GuestConnectionWaitingMask guestWaitingMask;
     @FXML
     public HBox buttonBar;
     @FXML
@@ -27,48 +34,71 @@ public class GameViewController {
     @FXML
     public Button gameControlButton;
 
-    public GameViewController() {
+    public GameViewController(AbstractService service) {
+        this.service = service;
+        this.service.registerObserver(this);
     }
 
-    public void initData(GameManager game) {
-        this.game = game;
-        this.setupPane = new PlayerBoardSetupPane(game);
-        this.setupPane.initialize();
-        this.showBox.getChildren().add(setupPane);
+    @FXML
+    public void initialize() {
+        if (service.getIsHost()) {
+            final var connection = ((HostService) service).getConnectionData();
+            this.showBox.getChildren().add(new HostConnectionWaitingMask(connection));
+        } else {
+            this.showBox.getChildren().add(new GuestConnectionWaitingMask());
+        }
+
         buttonBar.setSpacing(10);
         buttonBar.setPadding(new Insets(40));
         backToStart.setMinHeight(75);
         backToStart.setMinWidth(200);
         gameControlButton.setMinHeight(75);
         gameControlButton.setMinWidth(200);
-        gameControlButton.setText("READY");
+        gameControlButton.setText("Start");
+        gameControlButton.setDisable(true);
     }
 
 
     public void onBackButtonClick(ActionEvent event) {
-        this.game = null;
         loadNewView("start-view.fxml");
     }
 
     public void onGameControlClick(ActionEvent event) {
-        if (this.game.getState() == GameState.SETUP) {
-            game.ready(true);
+        if (service.getGameState() == GameState.SETUP) {
+            service.gameReady();
             initGamePane();
             showBox.getChildren().clear();
             showBox.getChildren().add(gamePane);
-            gameControlButton.setText("START");
-        } else if (this.game.getState() == GameState.READY) {
-            game.start();
+            service.startGame();
             gameControlButton.setVisible(false);
-            IO.println(game.getState().toString());
         }
     }
 
-    private void initGamePane() {
-        if (this.game.getState() == GameState.READY) {
-            if (this.gamePane == null) {
-                this.gamePane = new GamePane(this.game);
+    protected synchronized void showBoardSetup() {
+        Platform.runLater(() -> {
+            if (boardSetupPane == null) {
+                boardSetupPane = new PlayerBoardSetupPane(service);
+                boardSetupPane.initialize();
+                showBox.getChildren().clear();
+                showBox.getChildren().add(boardSetupPane);
+                gameControlButton.setDisable(false);
             }
+        });
+    }
+
+    private void initGamePane() {
+        if (service.getGameState() == GameState.READY) {
+            if (this.gamePane == null) {
+                this.gamePane = new GamePane(this.service);
+            }
+        }
+    }
+
+    @Override
+    public void update(GameData data) {
+        if (boardSetupPane == null) {
+            showBoardSetup();
+            service.removeObserver(this);
         }
     }
 }
