@@ -17,6 +17,7 @@ public class HostServerSocket {
     public HostServerSocket(Consumer<String> messageHandler, String startMessage) {
         try {
             this.server = new ServerSocket(PORT);
+
             CompletableFuture.runAsync(() -> {
                 try {
                     openSession(messageHandler, startMessage);
@@ -30,7 +31,6 @@ public class HostServerSocket {
     }
 
     public void openSession(Consumer<String> messageHandler, String startMessage) throws IOException, InterruptedException {
-
         this.session = new HostClientSocket(server.accept(), messageHandler, startMessage);
         this.session.start();
     }

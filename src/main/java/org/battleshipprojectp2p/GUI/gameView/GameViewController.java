@@ -97,8 +97,8 @@ public class GameViewController implements GameObserver<GameData> {
     @Override
     public void update(GameData data) {
         if (boardSetupPane == null) {
-            showBoardSetup();
             service.removeObserver(this);
+            showBoardSetup();
         }
     }
 }

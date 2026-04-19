@@ -1,5 +1,6 @@
 package org.battleshipprojectp2p.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.battleshipprojectp2p.common.AttackSide;
 import org.battleshipprojectp2p.common.GameState;
 import org.battleshipprojectp2p.error.BrokenRuleException;
@@ -10,6 +11,11 @@ import org.battleshipprojectp2p.game.gameDto.GameSetup;
 import org.battleshipprojectp2p.game.observer.GameObserver;
 import org.battleshipprojectp2p.game.observer.GameSubject;
 import org.battleshipprojectp2p.game.ship.Ship;
+import org.battleshipprojectp2p.networking.networkingDto.CoinFlipMessage;
+import org.battleshipprojectp2p.networking.networkingDto.MessagePayload;
+import org.battleshipprojectp2p.networking.networkingDto.PayloadType;
+import org.battleshipprojectp2p.service.mappers.BaseMessageMapper;
+import org.battleshipprojectp2p.service.mappers.JSONMapper;
 
 public abstract class AbstractService {
 
@@ -17,6 +23,9 @@ public abstract class AbstractService {
     private volatile GameManager game;
     private final GameSubject subject;
     private final boolean isHost;
+
+    protected final BaseMessageMapper messageMapper = new BaseMessageMapper();
+    protected final JSONMapper jsonMapper = new JSONMapper();
 
     protected AbstractService(boolean isHost) {
         this.isHost = isHost;
@@ -48,10 +57,9 @@ public abstract class AbstractService {
 
     public synchronized void setGame(GameSetup setup) {
         if (this.game == null) {
-            IO.println("game is still null: ");
             this.game = new GameManager(setup, this.subject);
         }
-        game.notifyUpdate();
+        subject.notify(getGameData());
     }
 
     public GameData getGameData() {
@@ -74,14 +82,33 @@ public abstract class AbstractService {
         return game.getState();
     }
 
-    // TODO add CoinFlip
     public void gameReady() {
-        game.ready(true);
+        game.ready();
+    }
+
+    protected String getCoinFlipMessageJson() throws JsonProcessingException {
+        if (game != null) {
+            final var coinFlip = game.getCoinFlip();
+            final var message = messageMapper.buildMessage(new CoinFlipMessage(coinFlip));
+            return jsonMapper.toJson(message);
+        } else {
+            throw new RuntimeException("Game is null");
+        }
+    }
+
+    protected void handleOpponentsCoinFlip(MessagePayload payload) {
+        if (payload.type() == PayloadType.COIN_FLIP) {
+            final var coinFlip = ((CoinFlipMessage) payload).coinFlip();
+            IO.println("opponent flip: " + coinFlip);
+            game.setAttackSide(coinFlip);
+        }
+        IO.println(game.getSide());
     }
 
     public boolean getIsHost() {
         return isHost;
     }
+
 
     public AttackSide getAttackSide() {
         return game.getSide();

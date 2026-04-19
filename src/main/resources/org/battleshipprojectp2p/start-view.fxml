@@ -11,7 +11,7 @@
     </VBox.margin>
     <Button fx:id="hostStartButton" mnemonicParsing="false" onAction="#startHost" text="Start as Host"
             textFill="#3879bf"/>
-    <Button fx:id="guestStartButton" mnemonicParsing="false" onAction="#startGuest" text="Start ast Guest"
+    <Button fx:id="guestStartButton" mnemonicParsing="false" onAction="#startGuest" text="Start as Guest"
             textFill="#3879bf"/>
     <Button fx:id="closeButton" mnemonicParsing="false" onAction="#closeApp" text="Close" textFill="#3879bf"/>
 </VBox>

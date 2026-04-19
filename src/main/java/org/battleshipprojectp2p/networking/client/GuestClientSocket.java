@@ -14,8 +14,8 @@ public class GuestClientSocket extends Thread implements Closeable {
     public GuestClientSocket(String ip, int port, Consumer<String> messageHandler) throws IOException, InterruptedException {
         this.messageHandler = messageHandler;
         this.socket = new Socket(ip, port);
+        this.socket.setKeepAlive(true);
         this.join();
-        this.setDaemon(true);
     }
 
     public void run() {
@@ -38,6 +38,7 @@ public class GuestClientSocket extends Thread implements Closeable {
 
     public void sendMessage(String s) {
         if (this.out != null) {
+            IO.println("Client sends: " + s);
             this.out.println(s);
         }
     }

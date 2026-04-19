@@ -20,12 +20,12 @@ public class HostClientSocket extends Thread implements Closeable {
         this.socket.setKeepAlive(true);
         this.handleMessage = handleMessage;
         this.join();
-        this.setDaemon(true);
     }
 
-    public void sendMessage(String o) throws IOException {
+    public void sendMessage(String s) throws IOException {
         if (out != null) {
-            out.println(o);
+            IO.println("Host sends: " + s);
+            out.println(s);
         }
     }
 
@@ -34,8 +34,8 @@ public class HostClientSocket extends Thread implements Closeable {
         try {
             this.out = new PrintWriter(socket.getOutputStream(), true);
             this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            sendMessage(startMsg);
 
+            this.sendMessage(startMsg);
             while (!this.isInterrupted()) {
                 var message = in.readLine();
                 if (message != null) {

@@ -46,9 +46,11 @@ public class GameManager {
         IO.println("Game manager Started");
     }
 
-    public void ready(boolean opponentFlip) {
-        verifyGameState(GameState.SETUP);
+    public boolean getCoinFlip() {
+        return coinFlipManager.getCoinFlip();
+    }
 
+    public void setAttackSide(boolean opponentFlip) {
         final boolean isFirst = coinFlipManager.isFirstMove(opponentFlip);
 
         if (isFirst) {
@@ -56,6 +58,10 @@ public class GameManager {
         } else {
             attackSideManager.setCurrentSide(AttackSide.OPPONENT);
         }
+    }
+
+    public void ready() {
+        verifyGameState(GameState.SETUP);
         stateManager.setState(GameState.READY);
 
         notifyUpdate();
@@ -146,7 +152,7 @@ public class GameManager {
         return new GameData(this);
     }
 
-    public void notifyUpdate() {
+    private void notifyUpdate() {
         subject.notify(getGameData());
     }
 
