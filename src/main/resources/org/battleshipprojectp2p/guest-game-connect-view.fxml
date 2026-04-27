@@ -4,12 +4,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.battleshipprojectp2p.GUI.gameConnectView.GuestGameConnectController">
-    <Button fx:id="submitGuest" layoutX="281.0" layoutY="227.0" mnemonicParsing="false"
-            onAction="#connectGame" text="Enter game"/>
-    <Button fx:id="leavePageButton" layoutX="281.0" layoutY="267.0" mnemonicParsing="false"
-            onAction="#backToPrevPage" text="Back to Start"/>
-    <TextField fx:id="ipField" layoutX="287.0" layoutY="145.0"/>
-    <Label layoutX="183.0" layoutY="149.0" text="Host IP"/>
+    <Button fx:id="submitGuest" layoutX="281.0" layoutY="261.0" mnemonicParsing="false" onAction="#connectGame"
+            text="Enter game"/>
+    <Button fx:id="leavePageButton" layoutX="278.0" layoutY="300.0" mnemonicParsing="false" onAction="#backToPrevPage"
+            text="Back to Start"/>
     <Label layoutX="168.0" layoutY="97.0" text="Player name"/>
     <TextField fx:id="nameField" layoutX="287.0" layoutY="102.0" onKeyTyped="#onNameInput"/>
+    <Label layoutX="183.0" layoutY="149.0" text="Host IP"/>
+    <TextField fx:id="ipField" layoutX="287.0" layoutY="145.0"/>
+    <Label layoutX="191.0" layoutY="192.0" text="Port"/>
+    <TextField fx:id="portField" layoutX="284.0" layoutY="188.0" prefHeight="25.0" prefWidth="149.0"/>
 </AnchorPane>

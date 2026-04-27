@@ -1,9 +1,6 @@
 package org.battleshipprojectp2p.game.gameDto;
 
-import org.battleshipprojectp2p.game.player.Player;
-
 public record AttackDto(
-        Player player,
         int row,
         int column) {
 }

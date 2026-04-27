@@ -3,7 +3,9 @@ package org.battleshipprojectp2p.game;
 import org.battleshipprojectp2p.common.GameState;
 
 public class StateManager {
-    GameState state;
+    private GameState state;
+    private boolean isWon;
+
 
     public StateManager() {
         this.state = GameState.SETUP;
@@ -15,5 +17,13 @@ public class StateManager {
 
     public void setState(GameState newState) {
         this.state = newState;
+    }
+
+    public boolean getIsWon() {
+        return this.isWon;
+    }
+
+    public void setWon(boolean won) {
+        this.isWon = won;
     }
 }

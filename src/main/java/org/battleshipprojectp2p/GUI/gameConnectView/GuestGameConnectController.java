@@ -6,10 +6,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-import org.battleshipprojectp2p.game.GameManager;
-import org.battleshipprojectp2p.game.gameDto.GameSetup;
-import org.battleshipprojectp2p.game.player.Player;
+import org.battleshipprojectp2p.service.GuestService;
+import org.battleshipprojectp2p.service.dto.GuestSetupDto;
 
+import java.io.IOException;
+
+import static java.lang.Integer.parseInt;
 import static org.battleshipprojectp2p.GUI.ViewLoader.loadGameView;
 import static org.battleshipprojectp2p.GUI.ViewLoader.loadNewView;
 import static org.battleshipprojectp2p.GUI.utils.AlertService.showAlert;
@@ -22,6 +24,8 @@ public class GuestGameConnectController {
     @FXML
     private TextField ipField;
     @FXML
+    public TextField portField;
+    @FXML
     private Button submitGuest;
     public Button leavePageButton;
 
@@ -32,25 +36,18 @@ public class GuestGameConnectController {
     }
 
     @FXML
-    public void connectGame(ActionEvent event) {
+    public void connectGame(ActionEvent event) throws IOException, InterruptedException {
         final var name = nameField.getText();
         final var isNameValid = checkName(name);
         outlineWrongInput(isNameValid, nameField);
-        final var ip = "ipField.getText()";
-        final var cols = 10;
-        final var rows = 10;
+        final var ip = ipField.getText();
+        final var port = parseInt(portField.getText());
 
         if (isNameValid) {
-            GameManager game = new GameManager(
-                    new GameSetup(
-                            new Player(name),
-                            new Player("Opponent"),
-                            rows,
-                            cols,
-                            false
-                    )
-            );
-            loadGameView(game);
+            final var setup = new GuestSetupDto(name, ip, port);
+            final var service = new GuestService(false, setup);
+
+            loadGameView(service);
         } else {
             showAlert(Alert.AlertType.ERROR, "Wrong input", "Please enter valid values");
         }
@@ -63,13 +60,16 @@ public class GuestGameConnectController {
 
     @FXML
     public void onNameInput(KeyEvent keyEvent) {
+        getSource(keyEvent);
+    }
+
+    static void getSource(KeyEvent keyEvent) {
         var source = keyEvent.getSource();
         assert (source instanceof TextField);
         var field = (TextField) source;
         var text = field.getText();
         var isOk = checkName(text);
         outlineWrongInput(isOk, field);
-        IO.println("Name input ok: " + isOk);
 
         if (!text.isEmpty()) {
             if (!isOk) {

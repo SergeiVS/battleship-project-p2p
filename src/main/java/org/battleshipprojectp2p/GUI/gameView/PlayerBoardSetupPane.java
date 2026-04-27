@@ -9,11 +9,12 @@ import org.battleshipprojectp2p.GUI.models.boardModel.CellColors;
 import org.battleshipprojectp2p.GUI.models.boardModel.PaintableBoardCell;
 import org.battleshipprojectp2p.GUI.models.boardModel.PlayerBoardBuilderPane;
 import org.battleshipprojectp2p.GUI.models.shipModel.ShipChooserPane;
+import org.battleshipprojectp2p.common.GameState;
 import org.battleshipprojectp2p.error.BrokenRuleException;
-import org.battleshipprojectp2p.game.GameManager;
 import org.battleshipprojectp2p.game.gameDto.GameData;
 import org.battleshipprojectp2p.game.observer.GameObserver;
 import org.battleshipprojectp2p.game.ship.Ship;
+import org.battleshipprojectp2p.service.AbstractService;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -22,25 +23,27 @@ import static org.battleshipprojectp2p.GUI.utils.AlertService.showAlert;
 
 public class PlayerBoardSetupPane extends HBox implements GameObserver<GameData> {
 
-    private final GameManager gameManager;
-    private final PlayerBoardBuilderPane playersBoard;
-    private final ShipChooserPane chooserPane;
+    private final AbstractService service;
+    private PlayerBoardBuilderPane playersBoard;
+    private ShipChooserPane chooserPane;
 
-    public PlayerBoardSetupPane(GameManager gameManager) {
-        this.gameManager = gameManager;
-        this.playersBoard = new PlayerBoardBuilderPane(gameManager.getPlayerBoard(), this::onHandleClick);
-        this.chooserPane = new ShipChooserPane(playersBoard::setChosenShip);
-
-        gameManager.registerObserver(this);
+    public PlayerBoardSetupPane(AbstractService service) {
+        this.service = service;
+        service.registerObserver(this);
     }
 
     public void initialize() {
+        this.playersBoard = new PlayerBoardBuilderPane(service.getPlayerBoard(), this::onHandleClick);
+        this.chooserPane = new ShipChooserPane(playersBoard::setChosenShip);
         this.getChildren().addAll(chooserPane, playersBoard);
         this.setSpacing(20);
         this.setPadding(new Insets(40));
     }
 
     public void onHandleClick(PaintableBoardCell cell, MouseEvent event) {
+        if (service.getGameState() == GameState.GAME_OVER) {
+            return;
+        }
         var color = cell.getFill();
 
         if (color == (CellColors.EMPTY.getColor())) {
@@ -50,9 +53,8 @@ public class PlayerBoardSetupPane extends HBox implements GameObserver<GameData>
         }
 
         if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
-            update(gameManager.getGameData());
+            update(service.getGameData());
         }
-
 
         if (event.getEventType() == MouseEvent.MOUSE_CLICKED && event.getButton() == MouseButton.PRIMARY) {
             addShip(cell);
@@ -86,12 +88,11 @@ public class PlayerBoardSetupPane extends HBox implements GameObserver<GameData>
 
         try {
             final var ship = new Ship(cShip.type(), position, cShip.isVertical(), false);
-            gameManager.addShip(ship);
+            service.addShip(ship);
             playersBoard.setChosenShip(null);
-            update(gameManager.getGameData());
+            update(service.getGameData());
         } catch (BrokenRuleException e) {
             playersBoard.setChosenShip(null);
-
             assert chooser != null;
             chooser.decrementShipsAmount();
             showAlert(Alert.AlertType.ERROR, e.getRule(), e.getMessage());
@@ -115,7 +116,7 @@ public class PlayerBoardSetupPane extends HBox implements GameObserver<GameData>
 
         final var ship = optShip.get();
 
-        this.gameManager.removeShip(ship);
+        service.removeShip(ship);
 
         final var chooser = this.chooserPane.getShipChooser(ship.type());
 
@@ -128,7 +129,7 @@ public class PlayerBoardSetupPane extends HBox implements GameObserver<GameData>
 
         var firstPoint = cell.getPosition();
         var shipLength = ship.type().getLength();
-        var columns = gameManager.getColumns();
+        var columns = service.getGameData().columns();
         var isVertical = ship.isVertical();
         var position = new int[shipLength];
 
@@ -143,17 +144,15 @@ public class PlayerBoardSetupPane extends HBox implements GameObserver<GameData>
                 position[i] = (firstPoint.x() + i) * columns + firstPoint.y();
             }
         }
-
         return position;
     }
 
     private Optional<Ship> getShipToRemove(PaintableBoardCell cell) {
 
-        final var fleet = this.gameManager.getGameData().board().fleet();
-        var columns = this.gameManager.getColumns();
+        final var fleet = service.getGameData().board().fleet();
+        var columns = service.getGameData().columns();
         final var point = cell.getPosition();
         final var pos1D = point.x() * columns + point.y();
-
         return fleet.stream()
                 .filter(s -> isWrightPosition(s.position(), pos1D))
                 .findFirst();

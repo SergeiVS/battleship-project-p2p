@@ -10,7 +10,7 @@
         </VBox>
     </HBox>
     <HBox fx:id="buttonBar" alignment="BOTTOM_CENTER" prefHeight="38.0" prefWidth="125.0">
-        <Button mnemonicParsing="false" text="Back to start" fx:id="backToStart" onAction="#onBackButtonClick"/>
-        <Button mnemonicParsing="false" text="Button" fx:id="gameControlButton" onAction="#onGameControlClick"/>
+        <Button mnemonicParsing="false" text="Back to start" fx:id="backToStart" onMouseClicked="#onBackButtonClick"/>
+        <Button mnemonicParsing="false" text="Button" fx:id="gameControlButton" onMouseClicked="#onGameControlClick"/>
     </HBox>
 </VBox>

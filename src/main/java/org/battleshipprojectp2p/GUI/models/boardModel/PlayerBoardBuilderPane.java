@@ -79,7 +79,6 @@ public class PlayerBoardBuilderPane extends BoardPane {
 
             for (int i = y; i < y + length; i++) {
                 if (i < currentBoard.colsCount() && counter < length) {
-                    IO.println("new y added" + i);
                     points[counter] = new CellPoint(x, i);
                     counter++;
                 }

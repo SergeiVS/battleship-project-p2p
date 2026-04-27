@@ -5,13 +5,19 @@ public class CoinFlipManager {
     private final boolean isHost;
 
     public CoinFlipManager(boolean isHost) {
-        this.isHost = isHost;
 
+        this.isHost = isHost;
         coinFlip = Math.random() < 0.5;
     }
 
 
     public boolean isFirstMove(boolean opponentsCoinFlip) {
+
         return isHost == (coinFlip != opponentsCoinFlip);
     }
+
+    public boolean getCoinFlip() {
+        return this.coinFlip;
+    }
+
 }

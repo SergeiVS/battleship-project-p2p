@@ -20,6 +20,8 @@ public class GameSubject implements Subject<GameData> {
 
     @Override
     public void notify(GameData data) {
-        observers.forEach(observer -> observer.update(data));
+        observers.forEach(observer -> {
+            observer.update(data);
+        });
     }
 }

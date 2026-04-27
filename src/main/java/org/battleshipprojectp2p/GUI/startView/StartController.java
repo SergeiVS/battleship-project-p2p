@@ -9,8 +9,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 import static org.battleshipprojectp2p.GUI.ViewLoader.loadNewView;
 
 public class StartController {
@@ -41,7 +39,7 @@ public class StartController {
     }
 
     @FXML
-    public void startHost(ActionEvent actionEvent) throws IOException {
+    public void startHost(ActionEvent actionEvent) {
         loadNewView("host-game-connect-view.fxml");
     }
 

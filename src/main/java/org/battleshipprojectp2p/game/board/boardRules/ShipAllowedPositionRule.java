@@ -15,13 +15,9 @@ public class ShipAllowedPositionRule implements BoardRule {
     public void verifyRule(Board board, Ship ship) throws BrokenRuleException {
         final var position = IntStream.of(ship.position()).sorted().boxed().toList();
 
-        IO.println("Position: " + position);
-
         throwIfPositionOutOfBounds(board, ship);
 
         final var positionSurround = getShipSurround(board, position, ship.isVertical());
-
-        IO.println("Surround: " + positionSurround);
 
         throwIfPositionNotFree(board, positionSurround);
     }
@@ -35,14 +31,11 @@ public class ShipAllowedPositionRule implements BoardRule {
 
         if (!isVertical && (board.getColumnsCount() - (firstCell % board.getColumnsCount())) < shipLength) {
 
-            IO.println("Position out of bounds: " + firstCell);
             throw new BrokenRuleException(this.getClass(), "Ship position is out of bounds");
         }
 
         if (isVertical && (board.getRowsCount() - (firstCell / board.getColumnsCount())) < shipLength) {
 
-            IO.println("isVertical : " + (board.getRowsCount() - (firstCell / board.getRowsCount())) + ", Shiplength: " + shipLength);
-            IO.println("Position out of bounds: " + firstCell);
             throw new BrokenRuleException(this.getClass(), "Ship position is out of bounds");
         }
 
@@ -60,7 +53,6 @@ public class ShipAllowedPositionRule implements BoardRule {
         for (int p : surround) {
             if (p >= 0 && p < boardLength) {
                 if (boardArray[p].getCellValue() != CellValue.E) {
-                    IO.println("Position not free: " + p);
                     throw new BrokenRuleException(this.getClass(), "Ship overlaps with another ship position, min distance 1 cell in ary direction");
                 }
             }
@@ -76,7 +68,6 @@ public class ShipAllowedPositionRule implements BoardRule {
 
         if (!vertical) {
             final var row = position.getFirst() / colCount;
-            IO.println("Row: " + row);
             final var p0 = firstPosition - 1;
             final var p1 = lastPosition + 1;
 
@@ -105,7 +96,6 @@ public class ShipAllowedPositionRule implements BoardRule {
         } else {
 
             final var col = position.getFirst() % colCount;
-            IO.println("Column: " + col);
             final var p0 = firstPosition - colCount;
             final var p1 = lastPosition + colCount;
 
@@ -122,7 +112,6 @@ public class ShipAllowedPositionRule implements BoardRule {
                     }
                     surround.add(p);
                 }
-
             }
         }
         return surround;

@@ -7,9 +7,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import org.battleshipprojectp2p.game.GameManager;
-import org.battleshipprojectp2p.game.gameDto.GameSetup;
-import org.battleshipprojectp2p.game.player.Player;
+import org.battleshipprojectp2p.error.BrokenRuleException;
+import org.battleshipprojectp2p.service.HostService;
+import org.battleshipprojectp2p.service.dto.HostSetupDto;
 
 import static java.lang.Integer.parseInt;
 import static org.battleshipprojectp2p.GUI.ViewLoader.loadGameView;
@@ -18,6 +18,7 @@ import static org.battleshipprojectp2p.GUI.utils.AlertService.showAlert;
 import static org.battleshipprojectp2p.GUI.utils.InputsCheckUtil.*;
 
 public class HostGameConnectController {
+
 
     @FXML
     private AnchorPane GameSetupView;
@@ -41,18 +42,7 @@ public class HostGameConnectController {
 
     @FXML
     private void onNameInput(KeyEvent event) {
-        var source = event.getSource();
-        assert (source instanceof TextField);
-        var field = (TextField) source;
-        var text = field.getText();
-        var isOk = checkName(text);
-        outlineWrongInput(isOk, field);
-
-        if (!text.isEmpty()) {
-            if (!isOk) {
-                showAlert(Alert.AlertType.WARNING, "Wrong input", "Please enter a valid character");
-            }
-        }
+        GuestGameConnectController.getSource(event);
     }
 
 
@@ -75,7 +65,7 @@ public class HostGameConnectController {
     }
 
     @FXML
-    public void submitGameSetup(ActionEvent event) {
+    public void submitGameSetup(ActionEvent event) throws BrokenRuleException {
         var name = nameField.getText();
         var isNameValid = checkName(name);
         outlineWrongInput(isNameValid, nameField);
@@ -89,15 +79,9 @@ public class HostGameConnectController {
         if (!isNameValid || !isRowsValid || !isColsValid) {
             showAlert(Alert.AlertType.ERROR, "Wrong input", "Please enter valid values");
         } else {
-            GameSetup setup = new GameSetup(
-                    new Player(name),
-                    new Player("Opponent"),
-                    parseInt(rows),
-                    parseInt(cols),
-                    true
-            );
-            GameManager manager = new GameManager(setup);
-            loadGameView(manager);
+            HostSetupDto setup = new HostSetupDto(name, parseInt(cols), parseInt(rows));
+            final var service = new HostService(true, setup);
+            loadGameView(service);
         }
     }
 

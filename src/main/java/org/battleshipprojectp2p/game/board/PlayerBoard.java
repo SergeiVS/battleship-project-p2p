@@ -7,10 +7,12 @@ import org.battleshipprojectp2p.error.InvalidMoveException;
 import org.battleshipprojectp2p.game.board.boardRules.BoardRule;
 import org.battleshipprojectp2p.game.gameDto.AttackDto;
 import org.battleshipprojectp2p.game.gameDto.AttackResponseDto;
-import org.battleshipprojectp2p.game.ship.Ship;
 import org.battleshipprojectp2p.game.player.Player;
+import org.battleshipprojectp2p.game.ship.Ship;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 import static org.battleshipprojectp2p.game.ship.ShipType.getCellValueFromShipClass;
 
@@ -53,20 +55,20 @@ public class PlayerBoard extends Board {
 
 
     public AttackResponseDto markAttack(AttackDto attackDto) {
-        Player player = attackDto.player();
         int row = attackDto.row();
         int col = attackDto.column();
 
-        validatePlayer(player);
         validateRow(row);
         validateColumn(col);
 
         var cellIndex = getCellIndexByCoordinates(attackDto.row(), attackDto.column());
+        var shipType = board[cellIndex].getCellValue();
         validateIsAttacked(cellIndex);
         board[cellIndex].setAttacked();
 
-        if (board[cellIndex].getCellValue() == CellValue.E) {
-            return new AttackResponseDto(AttackStatus.MISS, CellValue.E);
+        if (shipType == CellValue.E) {
+            board[cellIndex].setCellValue(CellValue.M);
+            return new AttackResponseDto(AttackStatus.MISS, CellValue.M);
         }
 
         var ship = getShipByCell(cellIndex);
@@ -74,10 +76,11 @@ public class PlayerBoard extends Board {
 
         if (notAttacked.length == 0) {
             setShipSunk(ship);
-            return new AttackResponseDto(AttackStatus.SINK, getCellValueFromShipClass(ship.type()));
+            return new AttackResponseDto(AttackStatus.SINK, shipType);
+        } else {
+            board[cellIndex].setCellValue(CellValue.X);
+            return new AttackResponseDto(AttackStatus.HIT, CellValue.X);
         }
-
-        return new AttackResponseDto(AttackStatus.HIT, CellValue.X);
     }
 
     private Ship getShipByCell(int cellIndex) {
@@ -89,6 +92,9 @@ public class PlayerBoard extends Board {
     private void setShipSunk(Ship ship) {
         final var shipIndex = fleet.indexOf(ship);
         fleet.set(shipIndex, ship.sunk());
+        for (var i : fleet.get(shipIndex).position()) {
+            board[i].setCellValue(CellValue.K);
+        }
     }
 
 
@@ -110,22 +116,19 @@ public class PlayerBoard extends Board {
         }
     }
 
-    private void validatePlayer(Player player) {
-        if (!player.name().equals(owner.name())) {
-            throw new IllegalArgumentException("Player is not equal to this player");
-        }
-    }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         PlayerBoard playerBoard1 = (PlayerBoard) o;
-        return rowsCount == playerBoard1.rowsCount && columnsCount == playerBoard1.columnsCount && Objects.equals(owner, playerBoard1.owner) && Objects.deepEquals(board, playerBoard1.board);
+        return rowsCount == playerBoard1.rowsCount &&
+                columnsCount == playerBoard1.columnsCount &&
+                Objects.equals(owner, playerBoard1.owner) &&
+                Objects.deepEquals(board, playerBoard1.board);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(owner, rowsCount, columnsCount, Arrays.hashCode(board));
     }
-
 }
