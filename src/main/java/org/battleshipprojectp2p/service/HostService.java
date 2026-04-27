@@ -6,7 +6,6 @@ import org.battleshipprojectp2p.networking.networkingDto.ConnectionMessage;
 import org.battleshipprojectp2p.networking.networkingDto.GameSetupMessage;
 import org.battleshipprojectp2p.networking.networkingDto.HostServerAddress;
 import org.battleshipprojectp2p.networking.networkingDto.MessagePayload;
-import org.battleshipprojectp2p.networking.server.HostClientSocket;
 import org.battleshipprojectp2p.networking.server.HostServerSocket;
 import org.battleshipprojectp2p.service.dto.HostSetupDto;
 
@@ -16,12 +15,15 @@ import java.io.IOException;
 public class HostService extends AbstractService {
 
     private HostServerSocket server;
-    private HostClientSocket session;
-    private final HostSetupDto setup;
+    private final String name;
+    private final int rows;
+    private final int cols;
 
-    public HostService(boolean isHost, HostSetupDto setup) throws IOException {
+    public HostService(boolean isHost, HostSetupDto setup) {
         super(isHost);
-        this.setup = setup;
+        this.name = setup.name();
+        this.rows = setup.rows();
+        this.cols = setup.cols();
         buildConnection(setup);
     }
 
@@ -38,33 +40,32 @@ public class HostService extends AbstractService {
         }
     }
 
-    public void handleIncomingMessage(String msg) {
-        final var message = jsonMapper.toBaseMessage(msg);
-        try {
-            switch (message.type()) {
-                case CONNECT -> createGame(message.payload());
-                case COIN_FLIP -> handleOpponentsCoinFlip(message.payload());
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
-    private synchronized void createGame(MessagePayload message) throws IOException {
+    @Override
+    protected synchronized void createGame(MessagePayload message) {
         if (this.session == null) {
-            this.session = server.getHostClient();
+            setSession(server.getHostClient());
         }
 
         if (message instanceof ConnectionMessage(String user)) {
-            final var player = new Player(setup.name());
+            final var player = new Player(this.name);
             final var opponent = new Player(user);
-            final var gameSetup = new GameSetup(player, opponent, setup.rows(), setup.cols(), setup.isHost());
+            final var gameSetup = new GameSetup(player, opponent, this.rows, this.cols, getIsHost());
             setGame(gameSetup);
-            session.sendMessage(getCoinFlipMessageJson());
         }
     }
 
     public HostServerAddress getConnectionData() {
         return server.getConnectionsData();
+    }
+
+    @Override
+    public void closeConnection() {
+        try {
+            this.server.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        closeGame();
     }
 }

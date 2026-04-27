@@ -14,7 +14,6 @@ import org.battleshipprojectp2p.game.gameDto.AttackDto;
 import org.battleshipprojectp2p.game.gameDto.AttackResponseDto;
 import org.battleshipprojectp2p.game.gameDto.GameData;
 import org.battleshipprojectp2p.game.gameDto.GameSetup;
-import org.battleshipprojectp2p.game.observer.GameObserver;
 import org.battleshipprojectp2p.game.observer.GameSubject;
 import org.battleshipprojectp2p.game.ship.Ship;
 
@@ -24,14 +23,14 @@ import java.util.List;
 import static org.battleshipprojectp2p.game.ship.ShipType.getTotalShipsAmount;
 
 public class GameManager {
-    private final int rows;
-    private final int columns;
     private final PlayerBoard playerBoard;
     private final OpponentBoard opponentBoard;
     private final GameSubject subject;
     private final StateManager stateManager;
     private final CoinFlipManager coinFlipManager;
     private final AttackSideManager attackSideManager;
+    private final int rows;
+    private final int columns;
 
     public GameManager(GameSetup setup, GameSubject subject) {
         this.rows = setup.rows();
@@ -43,7 +42,6 @@ public class GameManager {
         this.coinFlipManager = new CoinFlipManager(setup.isHost());
         this.stateManager = new StateManager();
         this.attackSideManager = new AttackSideManager();
-        IO.println("Game manager Started");
     }
 
     public boolean getCoinFlip() {
@@ -63,7 +61,6 @@ public class GameManager {
     public void ready() {
         verifyGameState(GameState.SETUP);
         stateManager.setState(GameState.READY);
-
         notifyUpdate();
     }
 
@@ -87,7 +84,7 @@ public class GameManager {
 
     public AttackResponseDto markOpponentAttack(AttackDto attackDto) throws BrokenRuleException {
         verifyGameState(GameState.PLAYING);
-//        verifyAttackSide(AttackSide.OPPONENT);
+        verifyAttackSide(AttackSide.OPPONENT);
         final var response = playerBoard.markAttack(attackDto);
 
         attackSideManager.changeSide();
@@ -99,29 +96,13 @@ public class GameManager {
 
     public void markPlayerAttack(AttackDto attackDto, AttackResponseDto attackResponse) throws BrokenRuleException {
         verifyGameState(GameState.PLAYING);
-//        verifyAttackSide(AttackSide.PLAYER);
+        verifyAttackSide(AttackSide.PLAYER);
 
         opponentBoard.markAttack(attackDto.row(), attackDto.column(), attackResponse);
 
         verifyGame(opponentBoard);
         attackSideManager.changeSide();
         notifyUpdate();
-    }
-
-    public void verifyGame(Board board) {
-        if (board instanceof PlayerBoard) {
-            final var isLose = board.getFleet().stream()
-                    .allMatch(Ship::isSunk);
-            if (isLose) {
-                stateManager.setState(GameState.GAME_OVER);
-                notifyUpdate();
-            }
-        } else {
-            if (opponentBoard.getFleet().size() == getTotalShipsAmount()) {
-                stateManager.setState(GameState.GAME_OVER);
-                notifyUpdate();
-            }
-        }
     }
 
     public int getRows() {
@@ -152,23 +133,51 @@ public class GameManager {
         return new GameData(this);
     }
 
+
+    public void setGameOver(boolean isWon) {
+        if (stateManager.getState() != GameState.GAME_OVER) {
+            stateManager.setWon(!isWon);
+            stateManager.setState(GameState.GAME_OVER);
+            notifyUpdate();
+        }
+    }
+
+    public boolean isFleetComplete() {
+        return playerBoard.getFleet().size() == getTotalShipsAmount();
+    }
+
+    public boolean isWon() {
+        return stateManager.getIsWon();
+    }
+
     private void notifyUpdate() {
         subject.notify(getGameData());
     }
 
 
-    public void subscribeObserver(GameObserver<GameData> gameObserver) {
-        subject.subscribe(gameObserver);
-    }
-
-    public void unsubscribeObserver(GameObserver<GameData> gameObserver) {
-        subject.unsubscribe(gameObserver);
-    }
-
-
     private void verifyGameState(GameState gameState) {
-        if (stateManager.state != gameState) {
+        if (stateManager.getState() != gameState) {
             throw new IllegalStateException("Game is not in " + gameState.name() + " phase");
+        }
+    }
+
+    public void verifyGame(Board board) {
+        if (stateManager.getState() == GameState.GAME_OVER) {
+            return;
+        }
+        if (board instanceof PlayerBoard) {
+            final var isLose = board.getFleet().stream().allMatch(Ship::isSunk);
+            if (isLose) {
+                stateManager.setState(GameState.GAME_OVER);
+                stateManager.setWon(false);
+                notifyUpdate();
+            }
+        } else {
+            if (opponentBoard.getFleet().size() == getTotalShipsAmount()) {
+                stateManager.setState(GameState.GAME_OVER);
+                stateManager.setWon(true);
+                notifyUpdate();
+            }
         }
     }
 

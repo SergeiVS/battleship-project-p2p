@@ -1,6 +1,5 @@
 package org.battleshipprojectp2p.GUI.models.boardModel;
 
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -13,9 +12,7 @@ import org.battleshipprojectp2p.common.CellValue;
 import org.battleshipprojectp2p.game.board.BoardData;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -107,24 +104,12 @@ public class BoardPane extends Pane {
     void setCellColor(CellValue value, PaintableBoardCell pBoardCell) {
 
         switch (value) {
-            case CellValue.E: {
-                pBoardCell.setFill(CellColors.EMPTY.getColor());
-                break;
-            }
-            case CellValue.X: {
-                pBoardCell.setFill(CellColors.HIT.getColor());
-                break;
-            }
-            case CellValue.K: {
-                pBoardCell.setFill(CellColors.KILLED.getColor());
-                break;
-            }
-            case CellValue.M: {
-                pBoardCell.setFill(CellColors.MISSED.getColor());
-                break;
-            }
-            default:
-                pBoardCell.setFill(CellColors.SHIP.getColor());
+            case CellValue.E -> pBoardCell.setFill(CellColors.EMPTY.getColor());
+
+            case CellValue.X -> pBoardCell.setFill(CellColors.HIT.getColor());
+            case CellValue.K -> pBoardCell.setFill(CellColors.KILLED.getColor());
+            case CellValue.M -> pBoardCell.setFill(CellColors.MISSED.getColor());
+            default -> pBoardCell.setFill(CellColors.SHIP.getColor());
 
         }
     }

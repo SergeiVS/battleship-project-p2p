@@ -1,18 +1,20 @@
 package org.battleshipprojectp2p.networking.server;
 
+import org.battleshipprojectp2p.networking.client.ClientSocket;
 import org.battleshipprojectp2p.networking.networkingDto.HostServerAddress;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 
-public class HostServerSocket {
+public class HostServerSocket implements Closeable {
     private static final int PORT = 8080;
 
     private final ServerSocket server;
-    private HostClientSocket session;
+    private ClientSocket session;
 
     public HostServerSocket(Consumer<String> messageHandler, String startMessage) {
         try {
@@ -31,7 +33,7 @@ public class HostServerSocket {
     }
 
     public void openSession(Consumer<String> messageHandler, String startMessage) throws IOException, InterruptedException {
-        this.session = new HostClientSocket(server.accept(), messageHandler, startMessage);
+        this.session = new ClientSocket(server.accept(), messageHandler, startMessage);
         this.session.start();
     }
 
@@ -39,7 +41,15 @@ public class HostServerSocket {
         return new HostServerAddress(server.getInetAddress().toString(), server.getLocalPort());
     }
 
-    public HostClientSocket getHostClient() {
+    public ClientSocket getHostClient() {
         return this.session;
+    }
+
+    @Override
+    public void close() throws IOException {
+        if (session != null) {
+            session.close();
+        }
+        server.close();
     }
 }

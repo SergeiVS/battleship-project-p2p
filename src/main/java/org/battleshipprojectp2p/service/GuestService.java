@@ -1,9 +1,8 @@
 package org.battleshipprojectp2p.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.battleshipprojectp2p.game.gameDto.GameSetup;
 import org.battleshipprojectp2p.game.player.Player;
-import org.battleshipprojectp2p.networking.client.GuestClientSocket;
+import org.battleshipprojectp2p.networking.client.ClientSocket;
 import org.battleshipprojectp2p.networking.networkingDto.ConnectionMessage;
 import org.battleshipprojectp2p.networking.networkingDto.GameSetupMessage;
 import org.battleshipprojectp2p.networking.networkingDto.MessagePayload;
@@ -12,43 +11,40 @@ import org.battleshipprojectp2p.service.dto.GuestSetupDto;
 import java.io.IOException;
 
 public class GuestService extends AbstractService {
-
-    private final GuestClientSocket session;
-
-    private final GuestSetupDto setup;
+    private final String name;
 
     public GuestService(boolean isHost, GuestSetupDto setup) throws IOException, InterruptedException {
         super(isHost);
-        this.session = new GuestClientSocket(setup.ip(), setup.port(), this::handleIncomingMessage);
-        this.setup = setup;
-        this.session.start();
         final var baseMsg = messageMapper.buildMessage(new ConnectionMessage(setup.name()));
         final var startMsg = jsonMapper.toJson(baseMsg);
-        this.session.sendMessage(startMsg);
+        this.name = setup.name();
+        final var session = new ClientSocket(setup.ip(), setup.port(), this::handleIncomingMessage, startMsg);
+        session.start();
+        setSession(session);
     }
 
-    public void handleIncomingMessage(String msg) {
-
-        final var message = jsonMapper.toBaseMessage(msg);
-        try {
-            switch (message.type()) {
-                case GAME_SETUP_DATA -> createGame(message.payload());
-                case COIN_FLIP -> handleOpponentsCoinFlip(message.payload());
-            }
-        } catch (RuntimeException | IOException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    public void createGame(MessagePayload payload) throws JsonProcessingException {
+    @Override
+    public void createGame(MessagePayload payload) {
 
         if (payload instanceof GameSetupMessage(int rows, int columns, String host)) {
-            final var player = new Player(setup.name());
+            final var player = new Player(name);
             final var opponent = new Player(host);
-            final var gameSetup = new GameSetup(player, opponent, rows, columns, setup.isHost());
+            final var gameSetup = new GameSetup(player, opponent, rows, columns, getIsHost());
             setGame(gameSetup);
-            session.sendMessage(getCoinFlipMessageJson());
+        }
+    }
+
+    @Override
+    public void closeConnection() {
+        if (session != null) {
+            try {
+                this.session.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if (getGame() != null) {
+            closeGame();
         }
     }
 }

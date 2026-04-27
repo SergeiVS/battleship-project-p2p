@@ -9,6 +9,7 @@ import org.battleshipprojectp2p.GUI.models.boardModel.CellColors;
 import org.battleshipprojectp2p.GUI.models.boardModel.PaintableBoardCell;
 import org.battleshipprojectp2p.GUI.models.boardModel.PlayerBoardBuilderPane;
 import org.battleshipprojectp2p.GUI.models.shipModel.ShipChooserPane;
+import org.battleshipprojectp2p.common.GameState;
 import org.battleshipprojectp2p.error.BrokenRuleException;
 import org.battleshipprojectp2p.game.gameDto.GameData;
 import org.battleshipprojectp2p.game.observer.GameObserver;
@@ -40,6 +41,9 @@ public class PlayerBoardSetupPane extends HBox implements GameObserver<GameData>
     }
 
     public void onHandleClick(PaintableBoardCell cell, MouseEvent event) {
+        if (service.getGameState() == GameState.GAME_OVER) {
+            return;
+        }
         var color = cell.getFill();
 
         if (color == (CellColors.EMPTY.getColor())) {
@@ -51,7 +55,6 @@ public class PlayerBoardSetupPane extends HBox implements GameObserver<GameData>
         if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
             update(service.getGameData());
         }
-
 
         if (event.getEventType() == MouseEvent.MOUSE_CLICKED && event.getButton() == MouseButton.PRIMARY) {
             addShip(cell);

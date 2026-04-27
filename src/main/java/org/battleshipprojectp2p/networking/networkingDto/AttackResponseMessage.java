@@ -1,13 +1,13 @@
 package org.battleshipprojectp2p.networking.networkingDto;
 
 import org.battleshipprojectp2p.common.AttackStatus;
-import org.battleshipprojectp2p.game.ship.ShipType;
+import org.battleshipprojectp2p.common.CellValue;
 
 import java.io.Serializable;
 
 public record AttackResponseMessage(
         AttackStatus attackStatus,
-        ShipType shipType
+        CellValue shipType
 ) implements MessagePayload, Serializable {
     @Override
     public PayloadType type() {

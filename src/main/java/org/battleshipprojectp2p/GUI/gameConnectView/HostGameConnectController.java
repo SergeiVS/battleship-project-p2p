@@ -7,10 +7,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import org.battleshipprojectp2p.error.BrokenRuleException;
 import org.battleshipprojectp2p.service.HostService;
 import org.battleshipprojectp2p.service.dto.HostSetupDto;
-
-import java.io.IOException;
 
 import static java.lang.Integer.parseInt;
 import static org.battleshipprojectp2p.GUI.ViewLoader.loadGameView;
@@ -66,7 +65,7 @@ public class HostGameConnectController {
     }
 
     @FXML
-    public void submitGameSetup(ActionEvent event) throws IOException {
+    public void submitGameSetup(ActionEvent event) throws BrokenRuleException {
         var name = nameField.getText();
         var isNameValid = checkName(name);
         outlineWrongInput(isNameValid, nameField);

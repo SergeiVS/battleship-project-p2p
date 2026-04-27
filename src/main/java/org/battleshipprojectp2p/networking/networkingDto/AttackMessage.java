@@ -3,8 +3,8 @@ package org.battleshipprojectp2p.networking.networkingDto;
 import java.io.Serializable;
 
 public record AttackMessage(
-        int column,
-        int row
+        int row,
+        int column
 ) implements MessagePayload, Serializable {
     @Override
     public PayloadType type() {

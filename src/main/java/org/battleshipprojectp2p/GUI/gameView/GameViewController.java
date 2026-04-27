@@ -1,10 +1,10 @@
 package org.battleshipprojectp2p.GUI.gameView;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.battleshipprojectp2p.common.GameState;
@@ -18,15 +18,10 @@ import static org.battleshipprojectp2p.GUI.ViewLoader.loadNewView;
 public class GameViewController implements GameObserver<GameData> {
 
     private final AbstractService service;
-
     private PlayerBoardSetupPane boardSetupPane;
-
     private GamePane gamePane;
     @FXML
     private VBox showBox;
-
-    private HostConnectionWaitingMask hostWaitingMask;
-    private GuestConnectionWaitingMask guestWaitingMask;
     @FXML
     public HBox buttonBar;
     @FXML
@@ -59,17 +54,17 @@ public class GameViewController implements GameObserver<GameData> {
     }
 
 
-    public void onBackButtonClick(ActionEvent event) {
+    public void onBackButtonClick(MouseEvent event) {
+        Platform.runLater(service::closeConnection);
         loadNewView("start-view.fxml");
     }
 
-    public void onGameControlClick(ActionEvent event) {
+    public void onGameControlClick(MouseEvent event) {
         if (service.getGameState() == GameState.SETUP) {
             service.gameReady();
             initGamePane();
             showBox.getChildren().clear();
             showBox.getChildren().add(gamePane);
-            service.startGame();
             gameControlButton.setVisible(false);
         }
     }
@@ -81,15 +76,16 @@ public class GameViewController implements GameObserver<GameData> {
                 boardSetupPane.initialize();
                 showBox.getChildren().clear();
                 showBox.getChildren().add(boardSetupPane);
-                gameControlButton.setDisable(false);
+                gameControlButton.setDisable(true);
             }
         });
     }
 
     private void initGamePane() {
-        if (service.getGameState() == GameState.READY) {
+        if (service.getGameState() != GameState.SETUP) {
             if (this.gamePane == null) {
                 this.gamePane = new GamePane(this.service);
+                this.gamePane.initialize();
             }
         }
     }
@@ -97,8 +93,8 @@ public class GameViewController implements GameObserver<GameData> {
     @Override
     public void update(GameData data) {
         if (boardSetupPane == null) {
-            service.removeObserver(this);
             showBoardSetup();
         }
+        gameControlButton.setDisable(service.getGameState() != GameState.SETUP || !service.isFleetComplete());
     }
 }
