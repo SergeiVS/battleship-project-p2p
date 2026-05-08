@@ -3,7 +3,7 @@ package org.battleshipprojectp2p.GUI.gameView;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import org.battleshipprojectp2p.networking.networkingDto.HostServerAddress;
+import org.battleshipprojectp2p.networking.dto.gameLoopDto.HostServerAddress;
 
 public class HostConnectionWaitingMask extends VBox {
 

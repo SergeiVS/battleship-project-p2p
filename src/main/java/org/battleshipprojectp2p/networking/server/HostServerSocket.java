@@ -1,7 +1,7 @@
 package org.battleshipprojectp2p.networking.server;
 
 import org.battleshipprojectp2p.networking.client.ClientSocket;
-import org.battleshipprojectp2p.networking.networkingDto.HostServerAddress;
+import org.battleshipprojectp2p.networking.dto.gameLoopDto.HostServerAddress;
 
 import java.io.Closeable;
 import java.io.IOException;

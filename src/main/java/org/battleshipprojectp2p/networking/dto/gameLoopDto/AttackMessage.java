@@ -1,4 +1,4 @@
-package org.battleshipprojectp2p.networking.networkingDto;
+package org.battleshipprojectp2p.networking.dto.gameLoopDto;
 
 import java.io.Serializable;
 

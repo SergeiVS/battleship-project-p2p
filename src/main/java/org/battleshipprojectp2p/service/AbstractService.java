@@ -13,9 +13,9 @@ import org.battleshipprojectp2p.game.observer.GameObserver;
 import org.battleshipprojectp2p.game.observer.GameSubject;
 import org.battleshipprojectp2p.game.ship.Ship;
 import org.battleshipprojectp2p.networking.client.ClientSocket;
-import org.battleshipprojectp2p.networking.networkingDto.CoinFlipMessage;
-import org.battleshipprojectp2p.networking.networkingDto.MessagePayload;
-import org.battleshipprojectp2p.networking.networkingDto.PayloadType;
+import org.battleshipprojectp2p.networking.dto.gameLoopDto.CoinFlipMessage;
+import org.battleshipprojectp2p.networking.dto.gameLoopDto.MessagePayload;
+import org.battleshipprojectp2p.networking.dto.gameLoopDto.PayloadType;
 import org.battleshipprojectp2p.service.mappers.BaseMessageMapper;
 import org.battleshipprojectp2p.service.mappers.JSONMapper;
 
@@ -131,7 +131,7 @@ public abstract class AbstractService {
         if (game != null) {
             final var coinFlip = game.getCoinFlip();
             final var message = messageMapper.buildMessage(new CoinFlipMessage(coinFlip));
-            return jsonMapper.toJson(message);
+            return jsonMapper.baseMessageToJson(message);
         } else {
             throw new RuntimeException("Game is null");
         }

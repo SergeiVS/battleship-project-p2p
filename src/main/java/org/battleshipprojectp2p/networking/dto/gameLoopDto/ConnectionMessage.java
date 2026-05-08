@@ -1,10 +1,10 @@
-package org.battleshipprojectp2p.networking.networkingDto;
+package org.battleshipprojectp2p.networking.dto.gameLoopDto;
 
 import java.io.Serializable;
 
-public record ConnectionMessage (
+public record ConnectionMessage(
         String user
-)implements MessagePayload, Serializable {
+) implements MessagePayload, Serializable {
 
     @Override
     public PayloadType type() {

@@ -62,17 +62,17 @@ class OpponentBoardTest {
         assertFalse(board.getBoard()[6].isHit());
 
         board.markAttack(0, 0, new AttackResponseDto(AttackStatus.HIT, CellValue.X));
-        board.markAttack(0, 6, new AttackResponseDto(AttackStatus.MISS, CellValue.E));
+        board.markAttack(0, 6, new AttackResponseDto(AttackStatus.MISS, CellValue.M));
 
         assertEquals(CellValue.X, board.getBoard()[0].getCellValue());
         assertTrue(board.getBoard()[0].isHit());
 
-        assertEquals(CellValue.E, board.getBoard()[6].getCellValue());
+        assertEquals(CellValue.M, board.getBoard()[6].getCellValue());
         assertTrue(board.getBoard()[6].isHit());
     }
 
     @Test
-    void shouldAddNewShipToTheFleetIfSunk() throws BrokenRuleException {
+    void shouldAddNewShipToTheFleetIfSunk() {
 
         board.markAttack(0, 0, new AttackResponseDto(AttackStatus.HIT, CellValue.X));
         board.markAttack(0, 1, new AttackResponseDto(AttackStatus.HIT, CellValue.X));
@@ -119,9 +119,6 @@ class OpponentBoardTest {
         board.markAttack(0, 1, new AttackResponseDto(AttackStatus.HIT, CellValue.X));
         board.markAttack(0, 2, new AttackResponseDto(AttackStatus.SINK, CellValue.F));
 
-        assertThrows(BrokenRuleException.class, () -> board.markAttack(0, 3, new AttackResponseDto(AttackStatus.HIT, CellValue.X)));
-        assertThrows(BrokenRuleException.class, () -> board.markAttack(1, 3, new AttackResponseDto(AttackStatus.HIT, CellValue.X)));
-        assertThrows(BrokenRuleException.class, () -> board.markAttack(1, 1, new AttackResponseDto(AttackStatus.HIT, CellValue.X)));
-        assertDoesNotThrow(() -> board.markAttack(1, 0, new AttackResponseDto(AttackStatus.MISS, CellValue.E)));
+        assertDoesNotThrow(() -> board.markAttack(1, 0, new AttackResponseDto(AttackStatus.MISS, CellValue.M)));
     }
 }

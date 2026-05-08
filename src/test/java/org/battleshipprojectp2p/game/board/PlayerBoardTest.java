@@ -3,13 +3,14 @@ package org.battleshipprojectp2p.game.board;
 import org.battleshipprojectp2p.common.AttackStatus;
 import org.battleshipprojectp2p.common.CellValue;
 import org.battleshipprojectp2p.error.BrokenRuleException;
+import org.battleshipprojectp2p.error.InvalidMoveException;
 import org.battleshipprojectp2p.game.board.boardRules.BoardRule;
 import org.battleshipprojectp2p.game.board.boardRules.ShipAllowedPositionRule;
 import org.battleshipprojectp2p.game.board.boardRules.ShipAmountRule;
 import org.battleshipprojectp2p.game.gameDto.AttackDto;
 import org.battleshipprojectp2p.game.gameDto.AttackResponseDto;
-import org.battleshipprojectp2p.game.ship.Ship;
 import org.battleshipprojectp2p.game.player.Player;
+import org.battleshipprojectp2p.game.ship.Ship;
 import org.battleshipprojectp2p.game.ship.ShipType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -135,21 +136,21 @@ class PlayerBoardTest {
     @Test
     void markAttackEnemy() throws BrokenRuleException {
         playerBoard1.addShip(ship1);
-        var attack1 = new AttackDto(p1, 0, 1);
-        var attack2 = new AttackDto(p1, 0, 0);
-        var attack3 = new AttackDto(p1, 0, 2);
-        var attack4 = new AttackDto(p2, 0, 0);
-        var attack5 = new AttackDto(p1, 10, 0);
-        var attack6 = new AttackDto(p1, 0, 10);
+        var attack1 = new AttackDto(0, 1);
+        var attack2 = new AttackDto(0, 0);
+        var attack3 = new AttackDto(0, 2);
+        var attack4 = new AttackDto(0, 0);
+        var attack5 = new AttackDto(10, 0);
+        var attack6 = new AttackDto(0, 10);
 
         var result1 = playerBoard1.markAttack(attack1);
         var result2 = playerBoard1.markAttack(attack2);
         var result3 = playerBoard1.markAttack(attack3);
 
         assertEquals(new AttackResponseDto(AttackStatus.HIT, CellValue.X), result1);
-        assertEquals(new AttackResponseDto(AttackStatus.MISS, CellValue.E), result2);
+        assertEquals(new AttackResponseDto(AttackStatus.MISS, CellValue.M), result2);
         assertEquals(new AttackResponseDto(AttackStatus.SINK, getCellValueFromShipClass(ship1.type())), result3);
-        assertThrows(IllegalArgumentException.class, () -> playerBoard1.markAttack(attack4), "Player is not equal to this player");
+        assertThrows(InvalidMoveException.class, () -> playerBoard1.markAttack(attack4), "Player is not equal to this player");
         assertThrows(IllegalArgumentException.class, () -> playerBoard1.markAttack(attack5), "Invalid row");
         assertThrows(IllegalArgumentException.class, () -> playerBoard1.markAttack(attack6), "Invalid column");
     }

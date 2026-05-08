@@ -9,10 +9,10 @@ import org.battleshipprojectp2p.game.GameManager;
 import org.battleshipprojectp2p.game.gameDto.AttackDto;
 import org.battleshipprojectp2p.game.gameDto.AttackResponseDto;
 import org.battleshipprojectp2p.networking.client.ClientSocket;
-import org.battleshipprojectp2p.networking.networkingDto.AttackMessage;
-import org.battleshipprojectp2p.networking.networkingDto.AttackResponseMessage;
-import org.battleshipprojectp2p.networking.networkingDto.GameOverMessage;
-import org.battleshipprojectp2p.networking.networkingDto.MessagePayload;
+import org.battleshipprojectp2p.networking.dto.gameLoopDto.AttackMessage;
+import org.battleshipprojectp2p.networking.dto.gameLoopDto.AttackResponseMessage;
+import org.battleshipprojectp2p.networking.dto.gameLoopDto.GameOverMessage;
+import org.battleshipprojectp2p.networking.dto.gameLoopDto.MessagePayload;
 import org.battleshipprojectp2p.service.mappers.BaseMessageMapper;
 import org.battleshipprojectp2p.service.mappers.JSONMapper;
 
@@ -50,7 +50,7 @@ public class GameLoopMessageService {
 
         this.attackedPoint = point;
         final var attackDto = new AttackMessage(point.x(), point.y());
-        final var attackJson = jsonMapper.toJson(messageMapper.buildMessage(attackDto));
+        final var attackJson = jsonMapper.baseMessageToJson(messageMapper.buildMessage(attackDto));
         try {
             session.sendMessage(attackJson);
         } catch (IOException e) {
@@ -68,7 +68,7 @@ public class GameLoopMessageService {
             try {
                 final var res = game.markOpponentAttack(attackDto);
                 final var attackResponse = new AttackResponseMessage(res.attackStatus(), res.cellValue());
-                final var json = jsonMapper.toJson(messageMapper.buildMessage(attackResponse));
+                final var json = jsonMapper.baseMessageToJson(messageMapper.buildMessage(attackResponse));
                 session.sendMessage(json);
                 notifyGameOver();
             } catch (IOException e) {
@@ -109,7 +109,7 @@ public class GameLoopMessageService {
         final var isWon = game.isWon();
         final var board = "";
         final var message = messageMapper.buildMessage(new GameOverMessage(isWon, board));
-        final var json = jsonMapper.toJson(message);
+        final var json = jsonMapper.baseMessageToJson(message);
         session.sendMessage(json);
     }
 

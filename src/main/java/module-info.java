@@ -28,8 +28,8 @@ module org.battleshipprojectp2p {
     opens org.battleshipprojectp2p.GUI.models.boardModel to javafx.fxml;
     exports org.battleshipprojectp2p.GUI.models.shipModel;
     opens org.battleshipprojectp2p.GUI.models.shipModel to javafx.fxml;
-    exports org.battleshipprojectp2p.networking.networkingDto;
-    opens org.battleshipprojectp2p.networking.networkingDto;
+    exports org.battleshipprojectp2p.networking.dto.gameLoopDto;
+    opens org.battleshipprojectp2p.networking.dto.gameLoopDto;
     exports org.battleshipprojectp2p.common;
     exports org.battleshipprojectp2p.game;
     exports org.battleshipprojectp2p.game.gameDto;

@@ -1,4 +1,4 @@
-package org.battleshipprojectp2p.networking.networkingDto;
+package org.battleshipprojectp2p.networking.dto.gameLoopDto;
 
 import org.battleshipprojectp2p.common.AttackStatus;
 import org.battleshipprojectp2p.common.CellValue;

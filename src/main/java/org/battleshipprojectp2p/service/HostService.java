@@ -2,10 +2,10 @@ package org.battleshipprojectp2p.service;
 
 import org.battleshipprojectp2p.game.gameDto.GameSetup;
 import org.battleshipprojectp2p.game.player.Player;
-import org.battleshipprojectp2p.networking.networkingDto.ConnectionMessage;
-import org.battleshipprojectp2p.networking.networkingDto.GameSetupMessage;
-import org.battleshipprojectp2p.networking.networkingDto.HostServerAddress;
-import org.battleshipprojectp2p.networking.networkingDto.MessagePayload;
+import org.battleshipprojectp2p.networking.dto.gameLoopDto.ConnectionMessage;
+import org.battleshipprojectp2p.networking.dto.gameLoopDto.GameSetupMessage;
+import org.battleshipprojectp2p.networking.dto.gameLoopDto.HostServerAddress;
+import org.battleshipprojectp2p.networking.dto.gameLoopDto.MessagePayload;
 import org.battleshipprojectp2p.networking.server.HostServerSocket;
 import org.battleshipprojectp2p.service.dto.HostSetupDto;
 
@@ -21,6 +21,7 @@ public class HostService extends AbstractService {
 
     public HostService(boolean isHost, HostSetupDto setup) {
         super(isHost);
+
         this.name = setup.name();
         this.rows = setup.rows();
         this.cols = setup.cols();
@@ -32,7 +33,7 @@ public class HostService extends AbstractService {
         if (this.server == null) {
             try {
                 var baseMsg = messageMapper.buildMessage(setupPayload);
-                var startMsg = jsonMapper.toJson(baseMsg);
+                var startMsg = jsonMapper.baseMessageToJson(baseMsg);
                 this.server = new HostServerSocket(this::handleIncomingMessage, startMsg);
             } catch (RuntimeException | IOException e) {
                 throw new RuntimeException(e);
