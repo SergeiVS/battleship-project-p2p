@@ -2,6 +2,7 @@ package org.battleshipprojectp2p.networking.dto.gameLoopDto;
 
 import org.battleshipprojectp2p.common.AttackStatus;
 import org.battleshipprojectp2p.common.CellValue;
+import org.battleshipprojectp2p.networking.dto.encryptedMessageDto.EncryptedMessageType;
 
 import java.io.Serializable;
 
@@ -10,7 +11,7 @@ public record AttackResponseMessage(
         CellValue shipType
 ) implements MessagePayload, Serializable {
     @Override
-    public PayloadType type() {
-        return PayloadType.ATTACK_RESPONSE;
+    public EncryptedMessageType type() {
+        return EncryptedMessageType.ATTACK_RESPONSE;
     }
 }

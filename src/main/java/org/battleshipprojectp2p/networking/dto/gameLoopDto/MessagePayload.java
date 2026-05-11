@@ -2,6 +2,7 @@ package org.battleshipprojectp2p.networking.dto.gameLoopDto;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import org.battleshipprojectp2p.networking.dto.encryptedMessageDto.EncryptedMessage;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.DEDUCTION
@@ -16,6 +17,5 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = GameSetupMessage.class),
         @JsonSubTypes.Type(value = ReadyMessage.class),
 })
-public interface MessagePayload {
-    PayloadType type();
+public interface MessagePayload extends EncryptedMessage {
 }

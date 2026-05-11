@@ -1,5 +1,6 @@
 package org.battleshipprojectp2p.networking.dto.gameLoopDto;
 
+import org.battleshipprojectp2p.networking.dto.encryptedMessageDto.EncryptedMessageType;
 import org.battleshipprojectp2p.service.dto.HostSetupDto;
 
 import java.io.Serializable;
@@ -15,7 +16,7 @@ public record GameSetupMessage(
     }
 
     @Override
-    public PayloadType type() {
-        return PayloadType.GAME_SETUP_DATA;
+    public EncryptedMessageType type() {
+        return EncryptedMessageType.GAME_SETUP_DATA;
     }
 }

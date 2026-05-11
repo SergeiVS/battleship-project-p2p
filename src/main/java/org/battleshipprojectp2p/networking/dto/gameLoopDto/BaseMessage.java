@@ -1,16 +1,17 @@
 package org.battleshipprojectp2p.networking.dto.gameLoopDto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.battleshipprojectp2p.networking.dto.encryptedMessageDto.EncryptedMessageType;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 public record BaseMessage(
-        PayloadType type,
+        EncryptedMessageType type,
         @JsonInclude
         MessagePayload payload
 ) implements Serializable {
-    public BaseMessage(PayloadType type, MessagePayload payload) {
+    public BaseMessage(EncryptedMessageType type, MessagePayload payload) {
         if (!type.equals(payload.type())) {
             throw new IllegalArgumentException("Massage payload type mismatch");
         }

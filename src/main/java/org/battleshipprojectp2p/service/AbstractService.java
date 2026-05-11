@@ -13,9 +13,9 @@ import org.battleshipprojectp2p.game.observer.GameObserver;
 import org.battleshipprojectp2p.game.observer.GameSubject;
 import org.battleshipprojectp2p.game.ship.Ship;
 import org.battleshipprojectp2p.networking.client.ClientSocket;
+import org.battleshipprojectp2p.networking.dto.encryptedMessageDto.EncryptedMessageType;
 import org.battleshipprojectp2p.networking.dto.gameLoopDto.CoinFlipMessage;
 import org.battleshipprojectp2p.networking.dto.gameLoopDto.MessagePayload;
-import org.battleshipprojectp2p.networking.dto.gameLoopDto.PayloadType;
 import org.battleshipprojectp2p.service.mappers.BaseMessageMapper;
 import org.battleshipprojectp2p.service.mappers.JSONMapper;
 
@@ -117,7 +117,7 @@ public abstract class AbstractService {
     }
 
     protected void handleOpponentsCoinFlip(MessagePayload payload) {
-        if (payload.type() == PayloadType.COIN_FLIP) {
+        if (payload.type() == EncryptedMessageType.COIN_FLIP) {
             final var coinFlip = ((CoinFlipMessage) payload).coinFlip();
             game.setAttackSide(coinFlip);
         }

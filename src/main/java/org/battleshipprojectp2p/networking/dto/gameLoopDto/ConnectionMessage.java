@@ -1,5 +1,7 @@
 package org.battleshipprojectp2p.networking.dto.gameLoopDto;
 
+import org.battleshipprojectp2p.networking.dto.encryptedMessageDto.EncryptedMessageType;
+
 import java.io.Serializable;
 
 public record ConnectionMessage(
@@ -7,7 +9,7 @@ public record ConnectionMessage(
 ) implements MessagePayload, Serializable {
 
     @Override
-    public PayloadType type() {
-        return PayloadType.CONNECT;
+    public EncryptedMessageType type() {
+        return EncryptedMessageType.CONNECT;
     }
 }
